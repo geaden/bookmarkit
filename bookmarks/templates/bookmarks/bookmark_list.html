@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}Bookmarks{% endblock %}
+{% block content %}
+    <ul>
+        {% for bookmark in bookmark_list %}
+        <li><a href="{{ bookmark.link }}">{{ bookmark.title }}</a></li>
+        {% empty %}
+        <li>No bookmarks yet</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'bookmarks:create' %}">{% trans 'Add boookmark' %}</a>
+{% endblock %}

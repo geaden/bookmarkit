@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Geaden Finance :: {% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+        <link href="{% static 'css/custom.css' %}" rel="stylesheet" media="screen">
+        {% block extra_head %}{% endblock %}
+    </head>
+    <body>
+        {% include 'navigation/top_nav.html' %}
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+        <script src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
+{#        <script src="{% static 'js/typeahead.min.js' %}"></script>#}
+        <script src="{% static 'js/respond.min.js' %}"></script>
+        <script src="{% static 'js/csrf.js' %}"></script>
+        <script src="{% static 'js/custom.js' %}"></script>
+        {% block extra_js %}{% endblock %}
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{% load i18n %}
+<ul class="nav nav-tabs">
+    <li><a href="{% url 'main:index' %}">{% trans 'Overview' %}</a></li>
+    <li><a href="{% url 'accounts:list' %}">{% trans 'Accounts' %}</a></li>
+    <li><a href="{% url 'transactions:list' %}">{% trans 'Transactions' %}</a></li>
+    <li><a href="{% url 'budgets:main' %}">{% trans 'Budget' %}</a></li>
+    <li><a href="{% url 'banks:list' %}">{% trans 'Banks' %}</a></li>
+</ul>

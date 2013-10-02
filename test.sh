@@ -1,2 +1,2 @@
 # Runs tests
-coverage run mydjango/manage.py test --settings=mydjango.settings.test
+coverage run bookmarks/manage.py test $1 --settings=bookmarks.settings.test

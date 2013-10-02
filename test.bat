@@ -1,1 +1,1 @@
-coverage run mydjango\manage.py test --settings=mydjango.settings.test
+coverage run mydjango\manage.py test --settings=bookmarks.settings.test

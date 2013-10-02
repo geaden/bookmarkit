@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Logged out' %}{% endblock %}
+{% block extra_head %}
+    <noscript>
+        <meta http-equiv="refresh" content="3; url={% url 'bookmarks:main' %}">
+    </noscript>
+{% endblock %}
+{% block content %}
+<h1>{% trans 'You have been logged out' %}</h1>
+<p>
+    {% block translate %}
+        You'll be redirected to <a href="{% url 'bookmarks:main' %}"/>main page</a> in <span id="timer">3</span> seconds.
+    {% endblock %}
+</p>
+
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript">
+function countdown() {
+    var start = parseInt($('#timer').text());
+    if (start == 1) {
+        location.replace("{% url 'bookmarks:main' %}");
+    }
+    start--;
+    $('#timer').text(start);
+}
+
+$(document).ready(function() {
+    setInterval(function(){ countdown(); }, 1000);
+});
+</script>
+{% endblock %}

@@ -1,12 +1,7 @@
-Base Django project
-===================
+Bookmark It!
+=============
 
-Base django project
-
-Inspired by [@pydanny|http://www.twitter.com/pydanny]
-book "Two scoops of Django"
-
-Feel free to modify that layout to your own needs
+A simple app for storing and sharing your bookmarks
 
 
 Gennady Denisov, 2013

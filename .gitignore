@@ -15,6 +15,11 @@ local.py
 
 # No secret file
 secret.txt
+secret.txt
+admin.txt
+client_secrets.json
+google.sh
+recaptcha.sh
 
 # No coverage
 .coverage
@@ -24,3 +29,9 @@ secret.txt
 
 # No coverage report
 htmlcov
+
+# No coverage
+.coverage
+
+# Heroku stuff
+heroku.sh

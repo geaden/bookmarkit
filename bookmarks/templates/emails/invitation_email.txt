@@ -1,0 +1,8 @@
+{% load i18n %}
+{% blocktrans %}
+Hi {{ name }},
+{{ sender }} invited you to join Bookmark.It, a website where you can post and share your bookmarks with friends!
+To accept the invitation, please click the link below:
+{{ host }}{{ link }}
+-- Bookmark.It Team
+{% endblocktrans %}

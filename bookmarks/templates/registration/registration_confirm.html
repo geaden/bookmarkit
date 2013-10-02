@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Registration confirmation"%}{% endblock %}
+{% block content %}
+{% if not has_account and not activated%}
+    {% if not expired %}
+        <h1>{% trans 'Welcome ' %}{{ created_user.first_name }} {{ created_user.last_name }}!</h1>
+        <h2>{% trans 'Thanks for registration. You can access Bookmark.It now.' %}</h2>
+        <a href="{% url 'login' %}">{% trans 'login' %}</a>,{% trans ' or go to ' %}<a href="{% url 'index' %}">
+{% trans 'main page' %}</a>.
+    {% else %}
+        <p>{% trans 'The provided activation key has expired. Please ' %}<a href="{% url 'register' %}">{% trans 'register'%}</a>{% trans ' again.' %}</p>
+    {% endif %}
+{% else %}
+    <p>{% trans 'You already have account in our system. Please ' %}<a href="{% url 'login' %}">{% trans 'log in' %}</a></p>
+{% endif %}
+{% endblock %}

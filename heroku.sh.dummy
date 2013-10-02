@@ -1,0 +1,12 @@
+heroku config:set SECRET_KEY= &&
+heroku config:set DJANGO_SETTINGS_MODULE=bookmarks.settings.staging --remote $1 &&
+heroku config:set GOOGLEAPI_CLIENT_ID= &&
+heroku config:set GOOGLEAPI_CLIENT_SECRET= &&
+heroku config:set GOOGLEAPI_REDIRECT_URL= &&
+heroku config:set PYTHONPATH=$PYTHONPATH:./bookmarks/bookmarks/ &&
+heroku config:set ADMIN_USER= &&
+heroku config:set RECAPTCHA_PUBLIC_KEY= &&
+heroku config:set RECAPTCHA_PRIVATE_KEY= &&
+heroku run bookmarks/manage.py collectstatic --noinput &&
+heroku run bookmarks/manage.py syncdb &&
+heroku run bookmarks/manage.py migrate
