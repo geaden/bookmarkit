@@ -73,6 +73,13 @@ class BookmarksUserManger(BaseUserManager):
 USERNAME_FIELD = 'email'
 REQUIRED_FIELDS = ['last_name', 'first_name',]
 
+GENDER = (
+    (u'male', _('Male')),
+    (u'female', _('Female')),
+)
+
+nullable = {'null': True, 'blank': True}
+
 
 class BookmarksUser(AbstractBaseUser, PermissionsMixin):
     """
@@ -88,6 +95,10 @@ class BookmarksUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('First name'), max_length=255)
     activation_key = models.CharField(max_length=40, blank=True, null=True)
     key_expires = models.DateTimeField(blank=True, null=True)
+    gender = models.CharField(max_length=6, choices=GENDER, default=u'male')
+    picture = models.URLField(**nullable)
+    birthday = models.DateField(**nullable)
+    google_id = models.CharField(max_length=255, **nullable)
 
     USERNAME_FIELD = USERNAME_FIELD
     REQUIRED_FIELDS = REQUIRED_FIELDS

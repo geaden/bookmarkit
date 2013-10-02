@@ -198,6 +198,9 @@ GOOGLEAPI_CLIENT_ID = get_env_variable('GOOGLEAPI_CLIENT_ID')
 GOOGLEAPI_CLIENT_SECRET = get_env_variable('GOOGLEAPI_CLIENT_SECRET')
 GOOGLEAPI_REDIRECT_URL = get_env_variable('GOOGLEAPI_REDIRECT_URL')
 
+# Admin user
+ADMIN_USER = get_env_variable('ADMIN_USER')
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
