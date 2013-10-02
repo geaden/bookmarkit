@@ -4,3 +4,4 @@ South==0.7.6
 djangorestframework==2.3.8
 google-api-python-client==1.2
 django-toolbelt
+django-recaptcha==0.0.6

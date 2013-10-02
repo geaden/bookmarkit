@@ -1,5 +1,5 @@
 heroku config:set SECRET_KEY= &&
-heroku config:set DJANGO_SETTINGS_MODULE=bookmarks.settings.staging --remote $1 &&
+heroku config:set DJANGO_SETTINGS_MODULE=bookmarks.settings.staging &&
 heroku config:set GOOGLEAPI_CLIENT_ID= &&
 heroku config:set GOOGLEAPI_CLIENT_SECRET= &&
 heroku config:set GOOGLEAPI_REDIRECT_URL= &&
