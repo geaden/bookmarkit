@@ -201,7 +201,7 @@ class GoogleAuthReturnView(View):
         user.save()
         storage = Storage(CredentialsModel, 'id', user, 'credential')
         storage.put(credential)
-        return HttpResponseRedirect(reverse_lazy('profiles:reset'))
+        return HttpResponseRedirect(reverse_lazy('users:reset'))
 
     def get_user_info(self, credential):
         http = httplib2.Http()
