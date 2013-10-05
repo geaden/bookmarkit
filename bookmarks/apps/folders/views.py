@@ -6,6 +6,11 @@ from .models import Folder, FolderSystem
 
 from ..bookmarks.models import Bookmark
 
+from .serializers import FolderSerializer
+
+from rest_framework.generics import ListCreateAPIView, \
+    RetrieveUpdateDestroyAPIView
+
 
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
@@ -26,3 +31,13 @@ class FolderDetailView(DetailView):
         ctx = super(FolderDetailView, self).get_context_data(**kwargs)
         ctx['bookmarks'] = obj.bookmark_set.all()
         ctx['subfolders'] = obj.children.all()
+
+
+class FolderListCreateView(ListCreateAPIView):
+    model = Folder
+    serializer_class = FolderSerializer
+
+
+class FolderRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    model = Folder
+    serializer_class = FolderSerializer

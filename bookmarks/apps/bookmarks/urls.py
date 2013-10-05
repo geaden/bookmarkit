@@ -9,6 +9,6 @@ __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 urlpatterns = patterns(
     '',
-    url('^$', login_required(BookmarksListView.as_view()), name="main"),
-    url('^add/$', login_required(BookmarkCreateView.as_view()), name="create"),
+    url(r'^$', login_required(BookmarksListView.as_view()), name="main"),
+    url(r'^add/$', login_required(BookmarkCreateView.as_view()), name="create"),
 )

@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modular Bookmark App</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <script data-main="{% static 'js/main' %}" src="{% static 'js/lib/require/require.js' %}"></script>
+</head>
+<body>
+    <div id="bookmarkit" class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <ul class="nav nav-pills nav-stacked" role="menu">
+                    <li><a href="#">Share</a></li>
+                    <li><a href="#">Tree view</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-10">
+                <div class="row">
+                    <div id="control-panel">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-small" id="new-folder">
+                                <span class="glyphicon glyphicon-plus-sign"></span> Folder</button>
+                            <button class="btn btn-small" id="new-bookmark">
+                                <span class="glyphicon glyphicon-bookmark"> Bookmark</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Bookmarks</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="folder-list">
+                        <tr id="folders-null">
+                            <td colspan="5">
+                                <img src="http://www.iscriptscloud.com/project/styles/images/loader.gif" height="120" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

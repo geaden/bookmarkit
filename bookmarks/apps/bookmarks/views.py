@@ -6,6 +6,9 @@ from django.views.generic import ListView, FormView
 from .models import Bookmark, Link
 from .forms import BookmarkSaveForm
 
+from rest_framework.generics import ListCreateAPIView, \
+    RetrieveUpdateDestroyAPIView
+
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 
@@ -31,3 +34,9 @@ class BookmarkCreateView(FormView):
         bookmark.title = form.cleaned_data['title']
         bookmark.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class BookmarkListCreateView(ListCreateAPIView):
+    model = Bookmark
+
+

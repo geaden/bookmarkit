@@ -2,3 +2,88 @@
 .autocomplete-suggestion { padding: 10px 5px; font-size: 1.2em; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #f0f0f0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399ff; }
+
+.editing {
+    display: none;
+}
+
+/** Folder row **/
+tr.folder {
+    vertical-align: middle;
+}
+
+tr#folders-null {
+    height: 120px;
+    text-align: center;
+    vertical-align: middle;
+    color: #c0c0c0;
+}
+
+tr#folders-null > td {
+    vertical-align: middle;
+}
+/** End of folder row */
+
+td.folder-content {
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.folder-name {
+    position: relative;
+}
+
+/** Edit panel */
+.edit-panel {
+    position: absolute;
+    margin-left: 10px;
+    top: 17px;
+    left: -10px;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    background-color: #ffffff;
+    border-width: 1px;
+    z-index: 99999;
+}
+
+.edit-panel:hover {
+    background-color: #ffffff;
+    border-width: 1px;
+}
+
+.edit-panel > a {
+    padding-left: 2px;
+    color: red;
+    font-size: 0.9em;
+}
+
+.edit-panel > a:hover {
+    color: darkred;
+}
+
+.edit-panel > a:after {
+    border-left: 1px solid;
+}
+/** end of edit panel */
+
+
+/** Folder name input */
+.folder-input {
+    margin-bottom: 0;
+    width: 120px;
+}
+
+.folder-input > input {
+    height: 30px;
+    padding: 5px;
+}
+/** End of folder name input */
+
+
+.folder-icon.default {
+    background-image: url('../img/folders/Folder-Generic-Blue-icon.png');
+    background-size: 24px;
+    background-repeat: no-repeat;
+    padding: 12px;   /* width of the image plus a little extra padding */
+    display: block;
+}

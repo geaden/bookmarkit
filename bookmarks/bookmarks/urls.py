@@ -24,7 +24,16 @@ urlpatterns = patterns('',
     url(r'^users/', include('apps.users.urls',
                             namespace='users',
                             app_name='users')),
-    url(r'^friend/', include('apps.friends.urls',
+    # Folders namespace
+    url(r'^folders/', include('apps.folders.urls',
+                              namespace='folders',
+                              app_name='folders')),
+
+    url(r'^friends/', include('apps.friends.urls',
                              namespace='friends',
                              app_name='friends')),
+
+    url(r'^app/', include('apps.test_backbone.urls',
+                          namespace='backbone',
+                          app_name='test_backbone')),
 )
