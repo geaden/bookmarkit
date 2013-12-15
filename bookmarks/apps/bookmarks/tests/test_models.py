@@ -40,7 +40,7 @@ class BookmarksTestCase(TestCase):
     def test_shared_created(self):
         self.assertEquals(SharedBookmark.objects.count(), 1)
         self.assertEquals(self.shared.__unicode__(),
-                          u'foo@bar.bz, http://www.foo.bar,1')
+                          u'foo@bar.bz, http://www.foo.bar, 1')
 
     def test_bookmark_to_folder(self):
         folder = Folder.objects.create(

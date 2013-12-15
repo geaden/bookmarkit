@@ -4,7 +4,7 @@
 {% block content %}
 <table class="table table-hover">
     <thead>
-        <th>#</th>
+        <th></th>
         <th>Title</th>
         <th>Tags</th>
         <th></th>
@@ -26,6 +26,6 @@
         {% endfor %}
     </tbody>
 </table>
-{% include 'snippets/paginate.html' %}
 <a class="btn btn-default" href="{% url 'bookmarks:create' %}">{% trans 'Add boookmark' %}</a>
+{% include 'snippets/paginate.html' %}
 {% endblock %}

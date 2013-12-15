@@ -20,7 +20,7 @@ class UsersViewsTestCase(TestCase):
         )
         self.login_url = reverse('users:login')
         self.register_url = reverse('users:register')
-        self.reset_url = reverse('users:password_reset')
+        self.reset_url = reverse('users:reset')
 
     def test_login_view(self):
         response = self.client.get(self.login_url)
