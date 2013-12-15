@@ -1,9 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Create bookmark{% endblock %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans 'Create bookmark' %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui-1.10.3.custom.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.tagsinput.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/bookmark-tags.css' %}" />
+{% endblock %}
 {% block content %}
-<form method="POST" action="">
+<h1>{% trans 'Create bookmark' %}</h1>
+<form class="form-horizontal" method="POST" action="" role="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="submit" />
+    {% for field in form %}
+    <div class="form-group {% if field.errors %}has-error{% endif %}">
+        <div class="col-lg-10">
+            {{ field }}
+        </div>
+        {% if field.errors %}<span class="help-block col-lg-10"> {% for error in field.errors %}
+            {{ error }}
+        {% endfor %}</span>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="form-group">
+        <div class='col-lg-offset-2 col-lg-10'>
+            <input type="submit" class="btn btn-default" value="{% trans 'Save' %}" />
+        </div>
+    </div>
 </form>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/jquery-ui-1.10.3.custom.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.tagsinput.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/tags.js' %}"></script>
 {% endblock %}

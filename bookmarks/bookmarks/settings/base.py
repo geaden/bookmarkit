@@ -184,6 +184,7 @@ INSTALLED_APPS = (
     'apps.folders',
     'apps.friends',
     'apps.bookmarks',
+    'apps.tags',
 )
 
 SITE_HOST = 'foo.bar'

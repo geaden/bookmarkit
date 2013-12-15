@@ -27,4 +27,7 @@ urlpatterns = patterns('',
     url(r'^friend/', include('apps.friends.urls',
                              namespace='friends',
                              app_name='friends')),
+    url(r'^tags/', include('apps.tags.urls',
+                           namespace='tags',
+                           app_name='tags'))
 )

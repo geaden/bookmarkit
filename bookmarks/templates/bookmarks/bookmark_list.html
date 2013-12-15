@@ -2,12 +2,30 @@
 {% load i18n %}
 {% block title %}Bookmarks{% endblock %}
 {% block content %}
-    <ul>
+<table class="table table-hover">
+    <thead>
+        <th>#</th>
+        <th>Title</th>
+        <th>Tags</th>
+        <th></th>
+    </thead>
+    <tbody>
         {% for bookmark in bookmark_list %}
-        <li><a href="{{ bookmark.link }}">{{ bookmark.title }}</a></li>
+        <tr>
+            <td></td>
+            <td><a href="{{ bookmark.link }}">{{ bookmark.title }}</a></td>
+            <td>{% for tag in bookmark.tag_set.all %}
+                    <span class="label">{{ tag }}</span>
+                {% endfor %}
+            <td><a href="{% url 'bookmarks:create' %}?url={{ bookmark.link }}"><span class="glyphicon glyphicon-edit"></span></a></td>
+        </tr>
         {% empty %}
-        <li>No bookmarks yet</li>
+        <tr>
+            <td colspan="3">{% trans 'No bookmarks yet' %}</td>
+        </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'bookmarks:create' %}">{% trans 'Add boookmark' %}</a>
+    </tbody>
+</table>
+{% include 'snippets/paginate.html' %}
+<a class="btn btn-default" href="{% url 'bookmarks:create' %}">{% trans 'Add boookmark' %}</a>
 {% endblock %}
