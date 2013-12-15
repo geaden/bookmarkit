@@ -34,7 +34,7 @@
         </form>
     </div>
     {% if form.non_field_errors %}
-    <a href="{% url 'users:password_reset' %}">{% trans 'Forgot your password?' %}</a>
+    <a href="{% url 'users:reset' %}">{% trans 'Forgot your password?' %}</a>
     {% endif %}
     <a href="{% url 'users:google' %}"><img src="{% static 'img/g_signin.png' %}" alt="Sign in with Google" width="200" /></a>
 {% endblock %}
