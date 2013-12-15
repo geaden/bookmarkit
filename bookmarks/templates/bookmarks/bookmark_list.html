@@ -12,7 +12,7 @@
     <tbody>
         {% for bookmark in bookmark_list %}
         <tr>
-            <td></td>
+            <td><img src="{{ bookmark.favicon }}" /></td>
             <td><a href="{{ bookmark.link }}">{{ bookmark.title }}</a></td>
             <td>{% for tag in bookmark.tag_set.all %}
                     <span class="label">{{ tag }}</span>

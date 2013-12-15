@@ -19,6 +19,7 @@ class Link(models.Model):
 class Bookmark(models.Model):
     user = models.ForeignKey(BookmarksUser)
     link = models.ForeignKey(Link)
+    favicon = models.URLField(default='http://www.feederpro.nl/images/defaultFavicon.gif')
     title = models.CharField(max_length=200)
     folder = models.ForeignKey(Folder, null=True, blank=True)
 
@@ -38,5 +39,5 @@ class SharedBookmark(models.Model):
 
     def __unicode__(self):
         return '{bookmark}, {votes}'.format(bookmark=self.bookmark,
-                                           votes=self.votes)
+                                            votes=self.votes)
 

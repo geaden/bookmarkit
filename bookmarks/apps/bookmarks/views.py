@@ -12,6 +12,14 @@ from ..tags.models import Tag
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 
+def get_favicon(url):
+    """
+    Returns link to favicon
+    """
+    return 'http://www.google.com/s2/favicons?domain_url={0}'.format(
+        url)
+
+
 class BookmarksListView(ListView):
     model = Bookmark
     context_object_name = 'bookmark_list'
@@ -63,5 +71,7 @@ class BookmarkCreateEditView(FormView):
             bookmark.tag_set.add(tag)
         # Set bookmark title
         bookmark.title = form.cleaned_data['title']
+        # Set favicon
+        bookmark.favicon = get_favicon(link.url)
         bookmark.save()
         return HttpResponseRedirect(self.get_success_url())

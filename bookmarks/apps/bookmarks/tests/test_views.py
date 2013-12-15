@@ -27,13 +27,16 @@ class BookmarksViewsTestCase(TestCase):
     def test_create_bookmark_view(self):
         self.assertEquals(self.create_bookmark_url, '/add/')
         response = self.client.post(self.create_bookmark_url,
-                                    data={'url': 'http://www.foo.bar',
+                                    data={'url': 'http://www.nba.com',
                                           'title': 'Foo',
                                           'tags': 'foo,bar'})
         self.assertEquals(response.status_code, 302)
         self.assertEquals(urlparse(response['Location']).path, '/')
+        self.assertEquals(Link.objects.count(), 1)
         self.assertEquals(Bookmark.objects.count(), 1)
         self.assertEquals(Tag.objects.count(), 2)
+        bookmark = Bookmark.objects.get(link=Link.objects.get(url='http://www.nba.com/').pk)
+        self.assertEquals(bookmark.favicon, 'http://www.google.com/s2/favicons?domain_url=http://www.nba.com/')
 
     def test_edit_bookmark_view(self):
         bookmark = Bookmark.objects.create(

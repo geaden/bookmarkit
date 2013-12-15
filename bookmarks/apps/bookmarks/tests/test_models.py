@@ -50,4 +50,3 @@ class BookmarksTestCase(TestCase):
         self.bookmark.save()
         self.assertEquals(folder.bookmark_set.count(), 1)
 
-
