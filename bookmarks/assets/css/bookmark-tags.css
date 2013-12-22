@@ -23,6 +23,19 @@ div.tagsinput.focused {
     box-shadow:inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(82,168,236,0.6)
 }
 
+div.tagsinput.has-error {
+    border-color: #a94442;
+    color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+div.tagsinput.has-error.focused {
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
 div.tagsinput input {
     padding: 2px;
     font-size: 14px;
@@ -46,4 +59,12 @@ div.tagsinput span.tag a {
     color: #fff;
     text-decoration:none;
     font-size: 13px;
+}
+
+.ui-autocomplete {
+  position: absolute;
+}
+
+.ui-front {
+    z-index: 100000000;
 }

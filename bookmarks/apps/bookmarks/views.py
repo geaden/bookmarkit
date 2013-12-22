@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.views.generic import ListView, FormView
 
 from .models import Bookmark, Link
@@ -24,6 +25,12 @@ class BookmarksListView(ListView):
     model = Bookmark
     context_object_name = 'bookmark_list'
     paginate_by = 10
+    form_class = BookmarkSaveForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BookmarksListView, self).get_context_data(**kwargs)
+        ctx['form'] = self.form_class()
+        return ctx
 
 
 class BookmarkCreateEditView(FormView):
@@ -64,14 +71,30 @@ class BookmarkCreateEditView(FormView):
         # If the bookmark is being updated, clear old tag list.
         if not created:
             bookmark.tag_set.clear()
+        else:
+            # Set favicon
+            bookmark.favicon = get_favicon(link.url)
         # Create a new tag list
         tag_names = form.cleaned_data['tags'].split(',')
         for tag_name in tag_names:
-            tag, dummy = Tag.objects.get_or_create(name=tag_name)
+            tag, _ = Tag.objects.get_or_create(name=tag_name)
             bookmark.tag_set.add(tag)
         # Set bookmark title
         bookmark.title = form.cleaned_data['title']
-        # Set favicon
-        bookmark.favicon = get_favicon(link.url)
         bookmark.save()
+        if 'ajax' in self.request.GET:
+            content = {'url': bookmark.link.url,
+                       'favicon': bookmark.favicon,
+                       'title': bookmark.title,
+                       'tags': [tag.name for tag in bookmark.tag_set.all()],
+                       'created': created}
+            return HttpResponse(content=json.dumps(content), content_type='application/json')
         return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        if 'ajax' in self.request.GET:
+            return HttpResponseBadRequest(content=json.dumps(form.errors),
+                                          content_type='application/json')
+        return super(BookmarkCreateEditView, self).form_invalid(form)
+
+

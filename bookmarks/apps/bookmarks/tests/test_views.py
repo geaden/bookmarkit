@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from urlparse import urlparse
 
 from django.core.urlresolvers import reverse
@@ -24,7 +25,10 @@ class BookmarksViewsTestCase(TestCase):
                           password='bar')
         self.create_bookmark_url = reverse('bookmarks:save')
 
-    def test_create_bookmark_view(self):
+    def test_list_bookmark_view(self):
+        pass
+
+    def test_save_bookmark_view(self):
         self.assertEquals(self.create_bookmark_url, '/save/')
         response = self.client.post(self.create_bookmark_url,
                                     data={'url': 'http://www.nba.com',
@@ -53,5 +57,38 @@ class BookmarksViewsTestCase(TestCase):
         # TODO: fix to edit bookmark
         self.assertEquals(Bookmark.objects.count(), 2)
         self.assertEquals(Tag.objects.count(), 2)
+
+    def test_edit_bookmark_ajax_view(self):
+        bookmark = Bookmark.objects.create(
+            link=Link.objects.create(url='http://foo.bar/'),
+            title='Foo',
+            user=self.user
+        )
+        before = Bookmark.objects.count();
+        response = self.client.post('{0}?ajax&url={1}'.format(
+            self.create_bookmark_url, bookmark.link.url),
+            data={'url': bookmark.link.url,
+                  'title': 'Bar',
+                  'tags': 'foo,bar'})
+        self.assertEquals(200, response.status_code)
+        data = json.loads(response.content)
+        self.assertEquals(data['title'], 'Bar')
+        self.assertEquals(data['url'], bookmark.link.url)
+        self.assertEquals(data['tags'], [u'foo', u'bar'])
+        self.assertEquals(before, Bookmark.objects.count())
+        self.assertEquals(data['created'], False)
+
+        # Not valid data provided
+        response = self.client.post('{0}?ajax&url={1}'.format(
+            self.create_bookmark_url, bookmark.link.url),
+            data={'url': bookmark.link.url,
+                  'title': 'Bar'})
+        self.assertEquals(400, response.status_code)
+        data = json.loads(response.content)
+        self.assertEquals(data['tags'], [u'This field is required.'])
+
+
+
+
 
 

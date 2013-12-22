@@ -17,7 +17,6 @@ $(document).ready(function() {
         },
         height: '45px',
         width: '100%',
-        interactive: true,
         defaultText: 'Tags'
     });
 
