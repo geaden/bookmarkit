@@ -1,5 +1,5 @@
 {% if is_paginated %}
-    <ul class="pagination">
+    <ul class="pagination pagination-sm">
         <li {% if not page_obj.has_previous %}class="disabled"{% endif %}>
             <a href="{% if page_obj.has_previous %}{{ obj_url }}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">&laquo;</a>
         </li>

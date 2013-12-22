@@ -1,9 +1,9 @@
 {% load i18n %}
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bm-navbar-collapse">
+            <span class="sr-only">{% trans 'Toggle navigation' %}</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -11,12 +11,12 @@
         <a class="navbar-brand" href="{% url 'bookmarks:main' %}">Bookmarks&nbsp;<span class="label label-danger">Beta!</span> </a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <div class="collapse navbar-collapse" id="bm-navbar-collapse">
         <ul class="nav navbar-nav">
 
         </ul>
     </div>
     {% if user.is_authenticated %}
-    <p class="navbar-text pull-right">Signed in as <a href="{% url 'users:logout' %}" class="navbar-link">{{ user.first_name }} {{ user.last_name }}</a></p>
+    <p class="navbar-text pull-right">Signed in as <a href="{% url 'users:logout' %}" class="navbar-link"><img src="{{ user.picture|default:'http://2.bp.blogspot.com/-iZ9aRe865rs/UlUxTymZZAI/AAAAAAAAves/mInkBFJkvkE/s1600/images.jpg' }}" class="img-circle" height="30px"/>&nbsp;{{ user.first_name }} {{ user.last_name }}</a></p>
     {% endif %}
 </nav>

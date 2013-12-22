@@ -17,7 +17,7 @@
             <td>{% for tag in bookmark.tag_set.all %}
                     <span class="label">{{ tag }}</span>
                 {% endfor %}
-            <td><a href="{% url 'bookmarks:create' %}?url={{ bookmark.link }}"><span class="glyphicon glyphicon-edit"></span></a></td>
+            <td><a href="{% url 'bookmarks:save' %}?url={{ bookmark.link }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
         </tr>
         {% empty %}
         <tr>
@@ -26,6 +26,6 @@
         {% endfor %}
     </tbody>
 </table>
-<a class="btn btn-default" href="{% url 'bookmarks:create' %}">{% trans 'Add boookmark' %}</a>
+<a class="btn btn-default" href="{% url 'bookmarks:save' %}">{% trans 'Add boookmark' %}</a>
 {% include 'snippets/paginate.html' %}
 {% endblock %}

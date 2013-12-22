@@ -22,10 +22,10 @@ class BookmarksViewsTestCase(TestCase):
         )
         self.client.login(username=self.user.email,
                           password='bar')
-        self.create_bookmark_url = reverse('bookmarks:create')
+        self.create_bookmark_url = reverse('bookmarks:save')
 
     def test_create_bookmark_view(self):
-        self.assertEquals(self.create_bookmark_url, '/add/')
+        self.assertEquals(self.create_bookmark_url, '/save/')
         response = self.client.post(self.create_bookmark_url,
                                     data={'url': 'http://www.nba.com',
                                           'title': 'Foo',

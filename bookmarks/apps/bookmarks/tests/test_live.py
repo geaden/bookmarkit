@@ -26,7 +26,7 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         self.browser.implicitly_wait(20)
         self.client.login(username=self.user.email,
                           password='buz')
-        self.create_bookmark_url = reverse('bookmarks:create')
+        self.create_bookmark_url = reverse('bookmarks:save')
 
     def tearDown(self):
         self.browser.quit()
