@@ -24,7 +24,7 @@ def get_favicon(url):
 class BookmarksListView(ListView):
     model = Bookmark
     context_object_name = 'bookmark_list'
-    paginate_by = 10
+    paginate_by = 20
     form_class = BookmarkSaveForm
 
     def get_context_data(self, **kwargs):

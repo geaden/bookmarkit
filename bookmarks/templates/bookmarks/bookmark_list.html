@@ -21,7 +21,7 @@
             <td><img src="{{ bookmark.favicon }}" /></td>
             <td><a href="{{ bookmark.link }}">{{ bookmark.title }}</a></td>
             <td>{% for tag in bookmark.tag_set.all %}
-                    <span class="label">{{ tag }}</span>
+                    <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
                 {% endfor %}
             <td><a class="bookmark-edit" href="{% url 'bookmarks:save' %}?url={{ bookmark.link }}" data-toggle="tooltip" title="{% trans 'Edit bookmark' %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
         </tr>
@@ -54,5 +54,4 @@
 <script type="text/javascript" src="{% static 'js/jquery.tagsinput.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/tags.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bookmark-edit.js' %}"></script>
-<script
 {% endblock %}

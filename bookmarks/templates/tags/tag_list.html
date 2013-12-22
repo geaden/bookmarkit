@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'bookmarks/bookmark_list.html' %}
 {% load i18n %}
-{% block title %}{% trans 'Tags' %}{% endblock %}
+{% block title %}{% trans 'Tag' %} :: {{ tag_name|escape }}{% endblock %}
 {% block content %}
-<ul>
-{% for tag in tags_list %}
-    <li>{{ tag.name }}</li>
-{% endfor %}
-</ul>
+<h1>{{ bookmark_list.count }} bookmark(s) for tag "{{ tag_name|escape }}"</h1>
+{{ block.super}}
 {% endblock %}

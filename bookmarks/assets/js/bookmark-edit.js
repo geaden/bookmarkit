@@ -88,7 +88,9 @@ function bookmark_save(event) {
                     '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>',
                     '</div>'].join(''));
                 var formattedTags = bookmark.tags.map(function(val) {
-                    return ['<span class="label">', val, '</span>'].join('');
+                    return ['<a href="/tags/', val,
+                        '">',
+                        '<span class="label">', val, '</span></a>'].join('');
                 });
                 var bookmarkTemplate = ['<tr>',
                             '<td>', '<img src="',
