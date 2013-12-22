@@ -31,7 +31,7 @@ class UsersViewsTestCase(TestCase):
                                    BookmarksAuthForm))
         response = self.client.post(self.login_url,
             {'username': 'foo@bar.bz', 'password': 'buz'})
-        self.assertRedirects(response, reverse('main:index'))
+        self.assertRedirects(response, reverse('bookmarks:main'))
 
     def test_register_view(self):
         os.environ['RECAPTCHA_TESTING'] = 'True'
@@ -68,9 +68,20 @@ class UsersViewsTestCase(TestCase):
         self.assertTrue(user.is_active)
 
     def test_reset_password(self):
+        data = {'password1': 'bar', 'password2': 'bar'}
         response = self.client.post(self.reset_url,
-            {'email': 'foo@bar.bz'})
-        self.assertEquals(len(mail.outbox), 1)
+                                    data)
+        # TODO: test password forgot
+        # You can't reset your password if you're not logged in
+        self.assertEquals(response.status_code, 302)
+        self.client.login(username='foo@bar.bz', password='buz')
+        response = self.client.post(self.reset_url,
+            data)
+        self.assertEquals(response.status_code, 302)
+        self.client.logout()
+        # Password changed successfully
+        self.client.login(username='foo@bar.bz', password='bar')
+        self.assertTrue(self.user.is_authenticated)
 
 
 

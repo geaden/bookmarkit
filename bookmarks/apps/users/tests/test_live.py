@@ -19,17 +19,11 @@ class UsersLiveTestCase(LiveServerTestCase):
                 email='foo@bar.bz',
                 last_name='foo',
                 first_name='bar',
-                password='buz'
-        )
+                password='buz')
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(20)
         self.login_url = reverse('users:login')
         self.register_url = reverse('users:register')
-
-    def tearDown(self):
-        self.browser.close()
-
-    def before_test(self):
         self.browser.get(self.live_server_url + self.login_url)
 
         body = self.browser.find_element_by_tag_name('body')
@@ -37,25 +31,24 @@ class UsersLiveTestCase(LiveServerTestCase):
         self.assertIn('Please Sign In', body.text,
                       msg='Login should be present in page')
 
-        username_field = self.browser.find_element_by_id('id_username')
-        password_field = self.browser.find_element_by_id('id_password')
-        return username_field, password_field
+        self.username_field = self.browser.find_element_by_id('id_username')
+        self.password_field = self.browser.find_element_by_id('id_password')
+
+    def tearDown(self):
+        self.browser.quit()
 
     def test_login_view(self):
-        username_field, password_field = self.before_test()
-        username_field.send_keys('foo@bar.bz')
-        password_field.send_keys('buz')
-        password_field.send_keys(Keys.RETURN)
+        self.username_field.send_keys('foo@bar.bz')
+        self.password_field.send_keys('buz')
+        self.password_field.send_keys(Keys.RETURN)
 
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('bar', body.text)
 
     def test_fail_login(self):
-        username_field, password_field = self.before_test()
-
-        username_field.send_keys('fooz@bar.bz')
-        password_field.send_keys('buz')
-        password_field.send_keys(Keys.RETURN)
+        self.username_field.send_keys('fooz@bar.bz')
+        self.password_field.send_keys('buz')
+        self.password_field.send_keys(Keys.RETURN)
 
         body = self.browser.find_element_by_tag_name('body')
 
@@ -63,7 +56,6 @@ class UsersLiveTestCase(LiveServerTestCase):
         self.assertIn('Forgot your password?', body.text)
 
     def test_empty_login(self):
-        self.before_test()
         password_field = self.browser.find_element_by_id(
             'id_password')
         password_field.send_keys(Keys.RETURN)

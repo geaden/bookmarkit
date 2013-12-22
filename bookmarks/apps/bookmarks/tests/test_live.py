@@ -29,7 +29,7 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         self.create_bookmark_url = reverse('bookmarks:create')
 
     def tearDown(self):
-        self.browser.close()
+        self.browser.quit()
 
     def test_create_bookmark_view(self):
         self.browser.get(self.live_server_url + self.create_bookmark_url)
