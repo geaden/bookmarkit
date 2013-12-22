@@ -3,10 +3,9 @@ div.tagsinput {
     overflow-y: hidden;
     display: block;
     width: 100%;
-    height: 38px;
+    height: 37px;
     padding: 8px 12px;
-    font-size: 14px;
-    line-height: 1.428571429;
+    font-size: 13px;
     color: #555;
     vertical-align: middle;
     background-color: #fff;
@@ -27,21 +26,24 @@ div.tagsinput.focused {
 div.tagsinput input {
     padding: 2px;
     font-size: 14px;
-    color: #555;
+    color: #D5D5D5;
 }
 
 div.tagsinput span.tag {
-    border: 1px solid #a5d24a;
-    -moz-border-radius:2px;
-    -webkit-border-radius:2px;
-    display: block;
-    float: left;
-    padding: 2px;
+    border: none;
+    background: #999;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: .25em;
+}
+
+div.tagsinput span.tag a {
+    font-weight: bold;
+    color: #fff;
     text-decoration:none;
-    background: #cde69c;
-    color: #638421;
-    margin-right: 2px;
-    margin-bottom: 2px;
-    font-family: helvetica;
-    font-size:13px;
+    font-size: 13px;
 }

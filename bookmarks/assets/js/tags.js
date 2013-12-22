@@ -18,7 +18,7 @@ $(document).ready(function() {
         height: '45px',
         width: '100%',
         interactive: true,
-        defaultText: 'Add tags'
+        defaultText: 'Tags'
     });
 
     $('div.tagsinput input').on('focus', function() {
