@@ -95,7 +95,7 @@ function bookmark_save(event) {
                 var bookmarkTemplate = ['<tr>',
                             '<td>', '<img src="',
                             bookmark.favicon, '" />',
-                            '</td>', '<td>', '<a href="', bookmark.url, '">',
+                            '</td>', '<td>', '<a href="', bookmark.url, '" class="bookmark-edit">',
                             bookmark.title, "</a></td>",
                             '<td>', formattedTags.join('&nbsp;'), '</td>',
                             '<td>', '<a class="bookmark-edit" href="/save/?ajax&url=',
