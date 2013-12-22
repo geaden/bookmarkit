@@ -8,7 +8,15 @@ install: "pip install -r requirements/ci.txt"
 
 script: ./test.sh
 
-env: SECRET_KEY=test
+env: 
+  global:
+    - SECRET_KEY="test"
+    - RECAPTCHA_PUBLIC_KEY="test"
+    - RECAPTCHA_PRIVATE_KEY="test"
+    - ADMIN_USER="foo@bar.bz"
+    - GOOGLEAPI_CLIENT_ID="apps.googleusercontent.com"
+    - GOOGLEAPI_CLIENT_SECRET="test"
+    - GOOGLEAPI_REDIRECT_URL="http://localhost:8000/users/oauth2callback"
 
 branches:
   only:
