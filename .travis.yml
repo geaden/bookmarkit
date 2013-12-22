@@ -6,7 +6,7 @@ python:
 
 install: "pip install -r requirements/ci.txt"
 
-script: test.sh
+script: ./test.sh
 
 env: SECRET_KEY=test
 
