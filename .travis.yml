@@ -6,11 +6,9 @@ python:
 
 install: "pip install -r requirements/ci.txt"
 
-script: test --settings=bookmarks.settings.test
+script: test.sh
 
 env: SECRET_KEY=test
-
-
 
 branches:
   only:
