@@ -1,35 +1,25 @@
 language: python
-
 python:
-  - "2.7"
-  - "2.6"
-
-install: "pip install -r requirements/ci.txt"
-
+- '2.7'
+install: pip install -r requirements/ci.txt
 script: ./test.sh
-
-env: 
+env:
   global:
-    - SECRET_KEY="test"
-    - RECAPTCHA_PUBLIC_KEY="test"
-    - RECAPTCHA_PRIVATE_KEY="test"
-    - ADMIN_USER="foo@bar.bz"
-    - GOOGLEAPI_CLIENT_ID="apps.googleusercontent.com"
-    - GOOGLEAPI_CLIENT_SECRET="test"
-    - GOOGLEAPI_REDIRECT_URL="http://localhost:8000/users/oauth2callback"
-
+  - SECRET_KEY="test"
+  - ADMIN_USER="foo@bar.bz"
+  - secure: GtqTbo6EX4+PkxSJk+++xftWhg+KuY02GXK8x4aKKZoxL8DVOAgSoIVSo63AIz+xxR7iBlG+8KBm52km9sNVA7ybOfTa9k6AaOv+DolI0RfPFjPYcY5Yi8vKHbPg5fss3cORZ4hcPstQ1JkLXmPqalkdWrniDAfsZWH1yhQXaRQ=
+  - secure: majk411hPRV9swixQLtA8d7HVutufMi9Ey+2pQxcWnJPPvfBFbfg3MuCFVBYtESbhmTAPLk7SP/x1jusJbhPSfmjaj1ys167x2stnfGFrMXKGnGwB3LgAseTnnzJZR/tr2s+SKLygibGiegwTftOnp2Bjs9M33I+DMxOudlwX7E=
+  - secure: AYEt/cJHKuU/RRuguzk61Av/VQMoK3kWdr8mCghKaQi/C/wQhKZ+V33OLdUKwK640Mj+BMORBUKLhBimFJxmceoRLUtLyu8EJA+Pi5grJVOtP3mPsLdvJEreEoyQ1lf5hSrgddEI6mSxcBlcC+h9w4RxM92oJRCLUpGFz4GSl1Q=
+  - secure: guo48FUSS9AV0qWifTjkMZMQpOydPfnUOwM0xbDMIwMmmHFJLbCZhuNrowytNlHORIsBo0YhCxpyUxt8UHqbUR8sbK5ileBzIBXNgniHXdHwT/6pFsZbGybs0pKEeUUQrwknCMJs6ePG1OXH/swBqZr+AQ5WY6z4LbnK7Magj6Y=
+  - secure: Q0PfEdRxdzu6oPUaGBWaZr2dsJX6OXm6sovrIqpIaIw6GkF1H8YSfjrzGFpN/rFrSnBKmFkXlLqfmVylCab7iFd1/PeoEOYr+lW9s6CGcC/ElKHqgWaZjFUYnqF8WEXnLh0EmJv8yITBsAb6SSuOtgelpRHAC5TPgXF9SnMhNU8=
 branches:
   only:
-    - ci
-
-# Sauce addon
+  - ci
 addons:
   sauce_connect:
-    username: "geaden"
-    access_key: "202ebc07-f1aa-4a75-888f-580d829a8aa7"
-
-# GUI
+    username: geaden
+    secure: F4Tq4CW2+D9FSJWS+BacsxiS0pdlOgqi/3xw/IoCO5lvcq1++7tsBj9yvysWhCDiCh4L+Q8gdhXzeLWIYC90mVPQXsbEwm83okuMYWLr6VRwlviwLs1vHjzVOFZUljTMRyLVGXQn52mGHHe84rxnOjZyTpIi1Jw+oeAZYe50Zao=
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
