@@ -33,6 +33,7 @@
     </tbody>
 </table>
 <a class="btn btn-default bookmark-add" href="{% url 'bookmarks:save' %}">{% trans 'Add bookmark' %}</a>
+{% url 'bookmarks:main' as obj_url %}
 {% include 'snippets/paginate.html' %}
 <!-- Modal -->
 <div class="modal fade" id="saveBookmark" tabindex="-1" role="dialog" aria-labelledby="saveBookmarkLabel" aria-hidden="true">

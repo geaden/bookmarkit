@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
+import os
 from urlparse import urlparse
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.core.management import call_command
 
 from ...users.models import BookmarksUser
 from ..models import Bookmark, Link
@@ -24,9 +26,23 @@ class BookmarksViewsTestCase(TestCase):
         self.client.login(username=self.user.email,
                           password='bar')
         self.create_bookmark_url = reverse('bookmarks:save')
+        self.list_bookmark_url = reverse('bookmarks:main')
 
     def test_list_bookmark_view(self):
-        pass
+        fixture_file = os.path.join(os.path.dirname(__file__), 'bookmarks.json')
+        items = 7
+        call_command("loaddata", "{0}".format(fixture_file),
+                     verbosity=0)
+        self.assertEquals(Bookmark.objects.count(), items,
+                          msg='Fixture should be'
+                          ' successfully loadded.')
+        self.assertEquals(self.list_bookmark_url, '/')
+        response = self.client.get(self.list_bookmark_url)
+        self.assertEquals(len(response.context['bookmark_list']), items)
+        self.assertEquals(response.context['bookmark_list'][0].id, items,
+                          msg='The first item should'
+                          ' be last added one.')
+        self.assertEquals(response.context['bookmark_list'][6].id, 1)
 
     def test_save_bookmark_view(self):
         self.assertEquals(self.create_bookmark_url, '/save/')
@@ -86,9 +102,3 @@ class BookmarksViewsTestCase(TestCase):
         self.assertEquals(400, response.status_code)
         data = json.loads(response.content)
         self.assertEquals(data['tags'], [u'This field is required.'])
-
-
-
-
-
-

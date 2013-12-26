@@ -1,0 +1,207 @@
+[
+{
+    "pk": 1, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://www.nba.com/"
+    }
+},
+{
+    "pk": 2, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://www.facebook.com/"
+    }
+},
+{
+    "pk": 3, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://www.yandex.ru/"
+    }
+},
+{
+    "pk": 4, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "https://www.dvlottery.state.gov/"
+    }
+},
+{
+    "pk": 5, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://www.dnba.com/"
+    }
+},
+{
+    "pk": 6, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://coding.smashingmagazine.com/2010/10/25/get-started-developing-for-android-with-eclipse/"
+    }
+},
+{
+    "pk": 7, 
+    "model": "bookmarks.link", 
+    "fields": {
+        "url": "http://www.wnba.com/"
+    }
+},
+{
+    "pk": 1, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "NBA", 
+        "link": 1, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://www.nba.com/"
+    }
+},
+{
+    "pk": 2, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "Facebook", 
+        "link": 2, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://www.facebook.com/"
+    }
+},
+{
+    "pk": 3, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "Yandex", 
+        "link": 3, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://yandex.ru/"
+    }
+},
+{
+    "pk": 4, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "DVlottery", 
+        "link": 4, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=https://www.dvlottery.state.gov/"
+    }
+},
+{
+    "pk": 5, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "NBA", 
+        "link": 5, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://www.dnba.com/"
+    }
+},
+{
+    "pk": 6, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "SMASHING", 
+        "link": 6, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://coding.smashingmagazine.com/2010/10/25/get-started-developing-for-android-with-eclipse/"
+    }
+},
+{
+    "pk": 7, 
+    "model": "bookmarks.bookmark", 
+    "fields": {
+        "folder": null, 
+        "title": "Wnba", 
+        "link": 7, 
+        "user": 1, 
+        "favicon": "http://www.google.com/s2/favicons?domain_url=http://www.wnba.com/"
+    }
+},
+{
+    "pk": 1, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            4, 
+            5
+        ], 
+        "name": "test"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            5
+        ], 
+        "name": "nba"
+    }
+},
+{
+    "pk": 3, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            3
+        ], 
+        "name": "yandex"
+    }
+},
+{
+    "pk": 4, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            2
+        ], 
+        "name": "facebook"
+    }
+},
+{
+    "pk": 5, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            6
+        ], 
+        "name": "smashing"
+    }
+},
+{
+    "pk": 6, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            1
+        ], 
+        "name": "good"
+    }
+},
+{
+    "pk": 7, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [], 
+        "name": "dnba"
+    }
+},
+{
+    "pk": 8, 
+    "model": "tags.tag", 
+    "fields": {
+        "bookmarks": [
+            7
+        ], 
+        "name": "wnba"
+    }
+}
+]
