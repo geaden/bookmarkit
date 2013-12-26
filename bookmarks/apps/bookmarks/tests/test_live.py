@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+import random
+from string import letters
 import time
 
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
 from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
@@ -15,6 +19,21 @@ __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 
 class BookmarksLiveTestCase(LiveServerTestCase):
+    items = 25
+
+    @classmethod
+    def setUpClass(cls):
+        BookmarksUser.objects.\
+            create_user(
+                email='foo@bur.bz',
+                last_name='foo',
+                first_name='bar',
+                password='buz')
+        fixture_file = os.path.join(os.path.dirname(__file__), 'bookmarks_paginated.json')
+        call_command("loaddata", "{0}".format(fixture_file),
+                     verbosity=0)
+        super(BookmarksLiveTestCase, cls).setUpClass()
+
     def setUp(self):
         self.user = BookmarksUser.objects.\
             create_user(
@@ -61,7 +80,12 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         self.assertEquals(Tag.objects.count(), 2)
 
     def test_bookmarks_pagination(self):
-        pass
+        self.assertEquals(Bookmark.objects.count(), self.items,
+                          msg='Fixtures should be loaded {0}.'.format(Bookmark.objects.count()))
+        self.browser.get(self.live_server_url)
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn(u'\xab\n1\n2\n\xbb', body.text,
+                      msg='Pagination should be present.')
 
     def test_save_bookmark_ajax(self):
         add_bookmark = self.browser.find_element_by_link_text('Add bookmark')

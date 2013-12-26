@@ -27,6 +27,11 @@ class BookmarksListView(ListView):
     paginate_by = 20
     form_class = BookmarkSaveForm
 
+    def get_queryset(self):
+        # Put the last added bookmarks on top
+        queryset = super(BookmarksListView, self).get_queryset()
+        return queryset.order_by('-id')
+
     def get_context_data(self, **kwargs):
         ctx = super(BookmarksListView, self).get_context_data(**kwargs)
         ctx['form'] = self.form_class()
@@ -96,5 +101,3 @@ class BookmarkCreateEditView(FormView):
             return HttpResponseBadRequest(content=json.dumps(form.errors),
                                           content_type='application/json')
         return super(BookmarkCreateEditView, self).form_invalid(form)
-
-

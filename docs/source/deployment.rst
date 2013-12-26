@@ -4,6 +4,6 @@ Deployment instructions
 Deploy stage version
 --------------------
 
-`git push heroku stags:master`
+Run `git push heroku stage:master`
 
 `Stage url <http://bookmarsit.geaden.com>`_.
