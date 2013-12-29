@@ -20,6 +20,7 @@ __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
 class BookmarksLiveTestCase(LiveServerTestCase):
     items = 25
+    tags = 71
 
     @classmethod
     def setUpClass(cls):
@@ -102,9 +103,17 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         tags_field.send_keys('foo,')
         tags_field.send_keys('bar,')
         self.browser.find_element_by_css_selector('input[type=submit]').click()
+        # Alert message should be shown
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
         body = self.browser.find_element_by_tag_name('body')
-        self.assertNotIn('No bookmarks yet', body.text,
-                      msg='No bookmarks should be disappeared.')
+        table = self.browser.find_element_by_xpath('//table[@class="table table-hover"]')
+        # Count rows
+        count_rows = 0
+        for tr in table.find_elements_by_tag_name('tr'):
+            count_rows += 1
+        self.assertEquals(count_rows, 2)
+        self.assertIn('Foo', body.text)
         self.assertEquals(Bookmark.objects.count(), 1)
         self.assertEquals(Tag.objects.count(), 2)
 
@@ -126,15 +135,9 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         tags_field.send_keys('foo,')
         tags_field.send_keys('bar,')
         self.browser.find_element_by_css_selector('input[type=submit]').click()
-        time.sleep(2)
+        # Alert message should be shown
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
         body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('Saved successfully', body.text,
-                      msg='Bookmark should be successfully saved.')
-        close_button = self.browser.find_element_by_css_selector('button[data-dismiss="modal"]')
-        close_button.click()
-        time.sleep(2)
-        body = self.browser.find_element_by_tag_name('body')
-        self.assertNotIn('Save bookmark', body.text,
-                         msg='Title `Save bookmark` should be present')
         self.assertIn('foo', body.text, msg='Tag `foo` should be present')
         self.assertIn('bar', body.text, msg='Tag `bar` should be present')

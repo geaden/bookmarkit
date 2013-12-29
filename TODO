@@ -1,9 +1,10 @@
-* Fix pagination layout
 * Add tags cloud
+* Search page
 * Add voting for bookmarks
 * Syncing your bookmarks
 * Shared bookmarks
 
 Done:
 V Add link to tags
-
+V Fix pagination layout
+V Flash messages

@@ -14,3 +14,10 @@ body {
     margin-top: -50px;
     margin-left: -100px;
 }
+
+#flashMessageWrapper {
+    position: absolute;
+    top: 35px;
+    left: 45%;
+    z-index: 99999;
+}
