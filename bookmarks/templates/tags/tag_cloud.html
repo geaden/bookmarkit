@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+    <div id="tag-cloud">
+    {% for tag in tag_list %}
+        <p class="tag-cloud-element"><a href="{% url 'tags:page' tag.name %}" class="bookmark-tag" data-toggle="tooltip" title="{{ tag.count }} bookmarks">
+            <span class="label label-{% cycle 'default' 'primary' 'success' 'info' 'warning' 'danger' as labelcolors %}" style="font-size: {{ tag.weight }}px;">{{ tag.name }}</span></a></p>
+    {% empty %}
+        <p>{% trans 'No tags yet' %}</p>
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -28,6 +28,7 @@ deploy:
   provider: heroku
   api_key:
     secure: P7GIs9un1v9zBUbKBun2/V4aFGIAjV81Q1HRP9kN4jP67hrrexDe2cXZpKpp/DA8uME1ITJ6EDOvjEHEhnZEfq3YOGRogxWgKHdBJ8ky/QZYXQ4/xKMZsRtC5qR03x+/Dp0XOlJ0gFam4ig6eTZaIY4lF9n4O0fDjpYoqt1NHgM=
+  strategy: git
   run:
     - "python bookmarks/manage.py migrate"
   app: immense-oasis-2242

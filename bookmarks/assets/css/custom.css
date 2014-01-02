@@ -15,14 +15,6 @@ body {
     font-family: 'Lobster', cursive;
 }
 
-.progress {
-    position: fixed;
-    top: 50%;
-    left : 50%;
-    margin-top: -50px;
-    margin-left: -100px;
-}
-
 #flashMessageWrapper {
     position: fixed;
     top: 35px;
@@ -38,4 +30,19 @@ body {
     font-size: 12px;
     margin-top: 10px;
     background: white url("../img/search_icon.png") 8px 6px no-repeat;
+}
+
+/* Override navbar link style */
+.navbar-nav>li>a {
+    padding-top: 20px;
+    padding-bottom: 23px;
+}
+
+#tag-cloud {
+    margin: 50px;
+}
+
+p.tag-cloud-element {
+    display: inline-block;
+    padding: 10px;
 }
