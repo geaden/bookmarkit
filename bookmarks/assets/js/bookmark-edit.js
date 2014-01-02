@@ -4,6 +4,9 @@
  * @param e
  * @returns {boolean}
  */
+
+var flashMessage = new FlashMessage();
+
 function bookmark_edit(e) {
     e.preventDefault();
     $("#saveBookmark").modal('show');
@@ -17,7 +20,6 @@ function bookmark_edit(e) {
     });
     var tags = tags_array.join(',');
     var obj = {title: $title, url: $url, tags: tags};
-    console.log();
     $('#id_url').val(obj.url);
     $('#id_title').val(obj.title);
     $('#id_tags').importTags(obj.tags);
@@ -25,12 +27,12 @@ function bookmark_edit(e) {
 }
 
 $(document).ready(function () {
-    $('a.bookmark-edit').click(bookmark_edit);
+    $('a.bookmark-edit').on('click', bookmark_edit);
     $('a.bookmark-add').click(function(e) {
         e.preventDefault();
         $('#saveBookmark').modal('show');
     });
-    $('#bookmark-save-form').submit(bookmark_save);
+    $('#bookmark-save-form').on('submit', bookmark_save);
 });
 
 
@@ -49,6 +51,9 @@ function bookmark_save(event) {
         url: '/save/?ajax',
         type: 'post',
         beforeSend: function() {
+            $('input').each(function() {
+                $(this).attr('disabled');
+            })
             $('input[type=submit]').val('Saving...');
         },
         statusCode: {
@@ -59,9 +64,9 @@ function bookmark_save(event) {
                     var $field = $form.find("#id_" + field);
                     var $formGroup = $field.parent();
                     if (!$formGroup.hasClass('has-error')) {
+                        // This is necessary for tagsinput as well
                         $formGroup.addClass('has-error');
                         if (field === 'tags') {
-                            console.log('tags..');
                             var $tags = $('.tagsinput');
                             $tags.addClass('has-error');
                             $tags.parent().append(['<span class="help-block">',
@@ -82,11 +87,10 @@ function bookmark_save(event) {
                 });
             },
             200: function(bookmark) {
-                $form.hide();
-                $('#saveBookmark .modal-body').append('<h5 id="bookmark-saved">Saved successfully</h5>');
-                $('#saveBookmark .modal-body').append(['<div class="modal-footer">',
-                    '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>',
-                    '</div>'].join(''));
+                // TODO i18n flash message
+                $('#saveBookmark').modal('hide');
+                flashMessage.show(['Bookmark <a href="',
+                    bookmark.url, '">', bookmark.title, '</a> has been successfully saved.'].join(''), 'success', 'flashMessageWrapper');
                 var formattedTags = bookmark.tags.map(function(val) {
                     return ['<a href="/tags/', val,
                         '">',
@@ -98,19 +102,23 @@ function bookmark_save(event) {
                             '</td>', '<td>', '<a href="', bookmark.url, '" class="bookmark-edit">',
                             bookmark.title, "</a></td>",
                             '<td>', formattedTags.join('&nbsp;'), '</td>',
-                            '<td>', '<a class="bookmark-edit" href="/save/?ajax&url=',
-                            bookmark.url, '"><span class="glyphicon glyphicon-pencil"></span></a></td>',
+                            '<td>', '<a class="bookmark-edit" href="/save/?url=',
+                            bookmark.url, '" data-toggle="tooltip" title="Edit bookmark">',
+                            '<span class="glyphicon glyphicon-pencil"></span></a></td>',
                             '</tr>'
                 ].join('');
                 if (bookmark.created) {
                     if ($('.bookmark-empty')) {
                         $('.bookmark-empty').remove();
+                        $('.table tbody').append(bookmarkTemplate);
+                    } else {
+                        $(bookmarkTemplate).insertBefore('.table tbody tr:first');
                     }
-                    $('.table tbody').append(bookmarkTemplate);
                 } else {
-                    // TODO: replace item
-                    var $url = $('a[href="' + bookmark.url + '"');
-                    var $td = $url.parent();
+                    // As alerts could be present bookmark urls could be more than one
+                    var $urls = $('a[href="' + bookmark.url + '"');
+                    var $url = $urls.length > 0 ? $urls[1] : $urls[0];
+                    var $td = $($url).parent();
                     $td.parent().html(bookmarkTemplate.slice(1, bookmarkTemplate.length - 2));
                 }
             }

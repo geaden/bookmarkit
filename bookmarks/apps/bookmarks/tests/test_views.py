@@ -102,3 +102,41 @@ class BookmarksViewsTestCase(TestCase):
         self.assertEquals(400, response.status_code)
         data = json.loads(response.content)
         self.assertEquals(data['tags'], [u'This field is required.'])
+
+    def test_bookmarks_search(self):
+        self.bookmark_foo = Bookmark.objects.create(
+            link=Link.objects.create(
+                url='http://www.foo.bz'
+            ),
+            title='Foo',
+            user=self.user
+        )
+        self.bookmark_boo = Bookmark.objects.create(
+            link=Link.objects.create(
+                url='http://www.boo.bz'
+            ),
+            title='Boo',
+            user=self.user
+        )
+        self.bookmark_zoo = Bookmark.objects.create(
+            link=Link.objects.create(
+                url='http://www.zoo.bz'
+            ),
+            title='Zoo',
+            user=self.user
+        )
+        self.tag_foo = Tag.objects.create(name='foo')
+        self.tag_boo = Tag.objects.create(name='boo')
+        self.tag_zoo = Tag.objects.create(name='zoo')
+        self.tag_bz = Tag.objects.create(name='bz')
+        self.bookmark_foo.tag_set.add(self.tag_foo, self.tag_bz)
+        self.bookmark_boo.tag_set.add(self.tag_boo, self.tag_bz)
+        self.bookmark_zoo.tag_set.add(self.tag_zoo, self.tag_bz)
+        self.search_url = reverse('bookmarks:search')
+        self.assertEquals(self.search_url, '/search/')
+        query_url = lambda q: '{0}?query={1}'.format(self.search_url, q)
+        response = self.client.get(query_url('Foo'))
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(len(response.context['bookmark_list']), 1)
+        self.assertIn('Search results for "Foo"', response.content)
+        self.assertNotIn('Add bookmark', response.content)

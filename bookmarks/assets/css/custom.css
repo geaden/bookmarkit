@@ -3,8 +3,16 @@
 .autocomplete-selected { background: #f0f0f0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399ff; }
 
+*, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Ubuntu', sans-serif;
+}
+
 body {
     padding-top: 70px;
+}
+
+.navbar-brand {
+    font-family: 'Lobster', cursive;
 }
 
 .progress {
@@ -13,4 +21,21 @@ body {
     left : 50%;
     margin-top: -50px;
     margin-left: -100px;
+}
+
+#flashMessageWrapper {
+    position: fixed;
+    top: 35px;
+    left: 45%;
+    z-index: 99999;
+}
+
+#bookmarkSearch {
+    border-radius: 20px;
+    height: 26px;
+    width: 100%;
+    padding: 0 12px 0 25px;
+    font-size: 12px;
+    margin-top: 10px;
+    background: white url("../img/search_icon.png") 8px 6px no-repeat;
 }

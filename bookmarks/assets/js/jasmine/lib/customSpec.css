@@ -1,0 +1,10 @@
+#testFlashMessage {
+    position: fixed;
+    top: 20px;
+    left: 45%;
+}
+
+.control-test {
+    position: absolute;
+    top: 600px;
+}

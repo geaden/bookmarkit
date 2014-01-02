@@ -1,8 +1,8 @@
 {% if is_paginated %}
-    <hr />
+    <p></p>
     <ul class="pagination pagination-sm">
         <li {% if not page_obj.has_previous %}class="disabled"{% endif %}>
-            <a href="{% if page_obj.has_previous %}{{ obj_url }}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">&laquo;</a>
+            <a href="{% if page_obj.has_previous %}{{ obj_url }}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}">&larr;</a>
         </li>
         {% for page in paginator.page_range %}
         <li {% ifequal page_obj.number page %}class="active"{% endifequal %}>
@@ -11,7 +11,7 @@
         </li>
         {% endfor %}
         <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
-            <a href="{% if page_obj.has_next %}{{ obj_url }}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}">&raquo;</a>
+            <a href="{% if page_obj.has_next %}{{ obj_url }}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}">&rarr;</a>
         </li>
     </ul>
 {% endif %}
