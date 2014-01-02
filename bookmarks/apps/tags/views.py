@@ -53,4 +53,41 @@ class TagPageView(BookmarksListView):
         return ctx
 
 
+class TagCloudView(ListView):
+    model = Tag
+    template_name = 'tags/tag_cloud.html'
+    context_object_name = 'tag_list'
+    MAX_WEIGHT = 22
+    MIN_WEIGHT = 8
+
+    def get_queryset(self):
+        return super(TagCloudView, self).get_queryset(). \
+            order_by('name')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(TagCloudView, self).get_context_data(**kwargs)
+        tags = self.get_queryset()
+        # Calculate tag, min and max counts
+        min_count = max_count = tags[0].bookmarks.count()
+        for tag in tags:
+            tag.count = tag.bookmarks.count()
+            if tag.count < min_count:
+                min_count = tag.count
+            if max_count < tag.count:
+                max_count = tag.count
+        # Calculate count range. Avoid dividing by zero
+        range = float(max_count - min_count)
+        if range == 0.0:
+            range = 1.0
+        # Calculate tag weights
+        for tag in tags:
+            tag.weight = max(self.MIN_WEIGHT, int(self.MAX_WEIGHT * (tag.count - min_count) / range))
+        ctx[self.context_object_name] = tags
+        return ctx
+
+
+
+
+
+
 

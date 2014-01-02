@@ -28,6 +28,9 @@ $(document).ready(function () {
     $('.bookmark-edit').tooltip({
         placement: 'left'
     });
+    $('.bookmark-tag').tooltip({
+        placement: 'right'
+    });
     // Clear inputs
     $('#saveBookmark').on('hide.bs.modal', function (e) {
         clearInputs('#bookmark-save-form');

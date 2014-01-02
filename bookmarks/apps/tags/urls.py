@@ -2,7 +2,8 @@
 from django.conf.urls import url, patterns
 from django.contrib.auth.decorators import login_required
 
-from .views import TagAutocompleteView, TagPageView
+from .views import TagAutocompleteView, TagPageView, \
+    TagCloudView
 
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
@@ -16,4 +17,8 @@ urlpatterns = patterns(
     url(r'^(?P<tag_name>\w+)/$',
         view=login_required(TagPageView.as_view()),
         name='page'),
+
+    url(r'^$',
+        view=login_required(TagCloudView.as_view()),
+        name='cloud'),
 )

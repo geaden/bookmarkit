@@ -39,11 +39,11 @@ START = 0
 ITEMS = 25
 
 
-def generate_links():
+def generate_links(start=START, items=ITEMS):
     links = []
     zones = ['com', 'ru', 'gov', 'su']
-    k = START + 1
-    while k <= ITEMS:
+    k = start + 1
+    while k <= items:
         id = k
         domain = ''.join([l for i in range(random.randint(4, 10))
                           for l in random.choice(letters)]).lower()
@@ -54,9 +54,9 @@ def generate_links():
     return links
 
 
-def generate_bookmarks():
+def generate_bookmarks(start=START, items=ITEMS):
     bookmarks = []
-    links = range(START + 1, ITEMS + 1)
+    links = range(start + 1, items + 1)
     k = START + 1
     while k <= ITEMS:
         try:
@@ -73,7 +73,7 @@ def generate_bookmarks():
     return bookmarks
 
 
-def generate_tags():
+def generate_tags(start=START, items=ITEMS):
     count = random.randint(20, 100)
     tags = []
     bks = range(START + 1, ITEMS + 1)
@@ -94,13 +94,50 @@ def generate_tags():
     return tags
 
 
-if __name__ == '__main__':
+def dump_fixture_data(links, bookmarks, tags, filename):
     res = []
-    res.append(',\n'.join(generate_links()))
-    res.append(',\n'.join(generate_bookmarks()))
-    res.append(',\n'.join(generate_tags()))
+    res.append(',\n'.join(links))
+    res.append(',\n'.join(bookmarks))
+    res.append(',\n'.join(tags))
     res = '[' + ',\n'.join(res)
     res += ']'
-    json.dump(json.loads(res), open('bookmarks_paginated.json', 'w'), indent=4)
+    print res
+    json.dump(json.loads(res), open(filename, 'w'), indent=4)
+
+
+def tag_cloud():
+    # Tag foo will have 10 bookmarks
+    # Tag bar will have 5 bookmarks
+    # Tag buz will have 2 bookmarks
+    # total 17 bookmarks
+    values = {'start': 1, 'items': 18}
+    links = generate_links(**values)
+    bkms = generate_bookmarks(**values)
+    k = 1
+    tags = []
+    bookmark_lb = lambda x: ',\n            '.join(map(str, x))
+    for tag in ['foo', 'bar', 'buz']:
+        t_id = k
+        tag_name = tag
+        if tag == 'foo':
+            bookmarks = bookmark_lb(range(1, 11))
+        elif tag == 'bar':
+            bookmarks = bookmark_lb(range(11, 16))
+        elif tag == 'buz':
+            bookmarks = bookmark_lb(range(16, 18))
+        tags.append(TAG.format(**locals()).
+                    replace('[', '{').
+                    replace('[', '{').
+                    replace(']', '}').
+                    replace('\\', '[').
+                    replace('/', ']'))
+        k += 1
+    dump_fixture_data(links, bkms, tags, 'tag_cloud_data.json')
+
+
+
+if __name__ == '__main__':
+    tag_cloud()
+
 
 
