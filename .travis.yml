@@ -15,13 +15,21 @@ env:
 branches:
   only:
   - ci
+  - stage
 addons:
   sauce_connect:
     username: geaden
     access_key:
-        secure: "GFOumOR40ho9gjVa37R1H/F1PpFUH+dQ38Nejy5cEoWI3B1nOaA6D26erBOdnlV9gC4lcXMPt+QMCDjGQsLI4fG3ioVmVFYF4OLGKUVgKF3Y5vYTcLnOJryJuENWg+SyYwKQE1QoMJJTsSxDx0j0ZaZUYcWN+YtcxgvLMnFXD/w="
-
+      secure: GFOumOR40ho9gjVa37R1H/F1PpFUH+dQ38Nejy5cEoWI3B1nOaA6D26erBOdnlV9gC4lcXMPt+QMCDjGQsLI4fG3ioVmVFYF4OLGKUVgKF3Y5vYTcLnOJryJuENWg+SyYwKQE1QoMJJTsSxDx0j0ZaZUYcWN+YtcxgvLMnFXD/w=
 before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 - sleep 3
+deploy:
+  provider: heroku
+  api_key:
+    secure: P7GIs9un1v9zBUbKBun2/V4aFGIAjV81Q1HRP9kN4jP67hrrexDe2cXZpKpp/DA8uME1ITJ6EDOvjEHEhnZEfq3YOGRogxWgKHdBJ8ky/QZYXQ4/xKMZsRtC5qR03x+/Dp0XOlJ0gFam4ig6eTZaIY4lF9n4O0fDjpYoqt1NHgM=
+  run:
+    - "python bookmarks/manage.py migrate"
+  app: immense-oasis-2242
+  on: stage
