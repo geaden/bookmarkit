@@ -31,18 +31,23 @@ FlashMessage.prototype.show = function(msg, type, el) {
       $addTo = $('body');
     }
     if (!this.isShown) {
-        $addTo.append('<div id="%s%" class="alert fade in"></div>'.replace(/%s%/, this.id));
+        $addTo.append('<div id="%s%" class="alert fade"></div>'.replace(/%s%/, this.id));
         this.el = $('#' + this.id);
         this.el.addClass('alert-' + type);
         this.el.html(this.message);
         // Add close button
-        var withClose = false;
-        if (!withClose) {
+        var withClose = true;
+        if (withClose) {
             this.el.append('<a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>');
         }
+        var _this = this;
+        // Animate out
+        window.setTimeout(function() {
+            _this.el.addClass('in');
+        }, 300);
+        $('.alert').alert();
     }
     this.isShown = true;
-    var _this = this;
     this.el.bind('closed.bs.alert', function () {
         _this.isShown = false;
     });

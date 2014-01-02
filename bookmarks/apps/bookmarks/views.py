@@ -2,6 +2,7 @@
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse_lazy
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.views.generic import ListView, FormView
 
@@ -101,3 +102,30 @@ class BookmarkCreateEditView(FormView):
             return HttpResponseBadRequest(content=json.dumps(form.errors),
                                           content_type='application/json')
         return super(BookmarkCreateEditView, self).form_invalid(form)
+
+
+class BookmarkSearchView(BookmarksListView):
+    def get_search_query(self):
+        if 'query' in self.request.GET:
+            query = self.request.GET.get('query').strip()
+            if query:
+                return query
+        return None
+
+    def get_queryset(self):
+        query = self.get_search_query()
+        if query is None:
+            return super(BookmarkSearchView, self).get_queryset()
+        keywords = query.split()
+        q = Q()
+        for keyword in keywords:
+            q = q & Q(title__icontains=keyword)
+        return self.model.objects.filter(q).order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BookmarkSearchView, self).get_context_data(**kwargs)
+        query = self.get_search_query()
+        if query is not None:
+            ctx['show_results'] = True
+            ctx['query'] = query
+        return ctx

@@ -10,13 +10,18 @@
         </button>
         <a class="navbar-brand" href="{% url 'bookmarks:main' %}">Bookmarks&nbsp;<span class="label label-danger">Beta!</span> </a>
     </div>
+    {% if user.is_authenticated %}
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bm-navbar-collapse">
         <ul class="nav navbar-nav">
 
         </ul>
     </div>
-    {% if user.is_authenticated %}
-    <p class="navbar-text pull-right">Signed in as <a href="{% url 'users:logout' %}" class="navbar-link"><img src="{{ user.picture|default:'http://2.bp.blogspot.com/-iZ9aRe865rs/UlUxTymZZAI/AAAAAAAAves/mInkBFJkvkE/s1600/images.jpg' }}" class="img-circle" height="30px"/>&nbsp;{{ user.first_name }} {{ user.last_name }}</a></p>
+    <p class="navbar-text pull-right">Signed in as <a href="{% url 'users:logout' %}" class="navbar-link">{{ user.first_name }}&nbsp;{{ user.last_name }}&nbsp;<img src="{{ user.picture|default:'http://2.bp.blogspot.com/-iZ9aRe865rs/UlUxTymZZAI/AAAAAAAAves/mInkBFJkvkE/s1600/images.jpg' }}" class="img-circle" height="30px"/></a></p>
+    <form class="navbar-form pull-right" role="search" action="{% url 'bookmarks:search' %}" method="GET">
+      <div class="form-group col-lg-12">
+        <input id="bookmarkSearch" type="text" class="form-control" placeholder="Search..." name="query" autocomplete="off">
+      </div>
+    </form>
     {% endif %}
 </nav>

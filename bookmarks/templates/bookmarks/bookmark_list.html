@@ -8,6 +8,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/bookmark-tags.css' %}" />
 {% endblock %}
 {% block content %}
+{% if show_results %}
+<h3>Search results for "{{ query }}":</h3>
+{% endif %}
 <table class="table table-hover">
     <thead>
         <th></th>
@@ -23,7 +26,7 @@
             <td>{% for tag in bookmark.tag_set.all %}
                     <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
                 {% endfor %}
-            <td><a class="bookmark-edit" href="{% url 'bookmarks:save' %}?url={{ bookmark.link }}" data-toggle="tooltip" title="{% trans 'Edit bookmark' %}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td>{% if not show_results %}<a class="bookmark-edit" href="{% url 'bookmarks:save' %}?url={{ bookmark.link }}" data-toggle="tooltip" title="{% trans 'Edit bookmark' %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
         </tr>
         {% empty %}
         <tr class="bookmark-empty">
@@ -32,7 +35,7 @@
         {% endfor %}
     </tbody>
 </table>
-<a class="btn btn-default bookmark-add" href="{% url 'bookmarks:save' %}">{% trans 'Add bookmark' %}</a>
+{% if not show_results %}<a class="btn btn-default bookmark-add" href="{% url 'bookmarks:save' %}">{% trans 'Add bookmark' %}</a>{% endif %}
 {% url 'bookmarks:main' as obj_url %}
 {% include 'snippets/paginate.html' %}
 <!-- Modal -->

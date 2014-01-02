@@ -18,7 +18,18 @@
 <body>
 <div class="container">
     <div id="testFlashMessage"></div>
-    <button onclick="runTests()" class="btn btn-success" style="position: absolute; top: 200px;">Show alert!</button>
+    <div class="control-test">
+        <div id="msg-text" class="form-group">
+            <textarea class="form-control" placeholder="Message text">Foo Bar Baz</textarea>
+        </div>
+        <ul id="msg-type" class="list-unstyled">
+            <li>success <input type="radio" name="msgType" value="success" checked /></li>
+            <li>info <input type="radio" name="msgType" value="info" /></li>
+            <li>warning <input type="radio" name="msgType" value="warning" /></li>
+            <li>danger <input type="radio" name="msgType" value="danger" /></li>
+        </ul>
+        <button onclick="runTests()" class="btn btn-success">Show alert!</button>
+    </div>
 </div>
 </body>
 </html>

@@ -1,0 +1,25 @@
+[
+    {
+        "pk": 1,
+        "model": "users.bookmarksuser",
+        "fields": {
+            "picture": null,
+            "first_name": "bar",
+            "last_name": "foo",
+            "is_staff": false,
+            "google_id": null,
+            "key_expires": null,
+            "gender": "male",
+            "is_active": true,
+            "activation_key": null,
+            "is_superuser": false,
+            "birthday": null,
+            "last_login": "2014-01-02T08:33:05.039Z",
+            "groups": [],
+            "user_permissions": [],
+            "is_admin": false,
+            "password": "pbkdf2_sha256$10000$AS7ue6Qcum6V$OX/lwLRh8XfiJ5v3br9PfbkFSkyRyxjqtnjkETcui5Y=",
+            "email": "foo@bar.bz"
+        }
+    }
+]

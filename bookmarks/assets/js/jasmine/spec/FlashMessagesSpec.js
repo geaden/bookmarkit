@@ -12,7 +12,10 @@ function assertTrue(msg, expected) {
 }
 
 function runTests(e) {
-    flashMessage.show('Foo Bar Buz', 'danger', 'testFlashMessage');
+    var $msgText = $('#msg-text > textarea').val();
+    var $msgType = $('input[name="msgType"]:checked').val();
+    var msgType = ($msgType) ? $msgType : 'info';
+    flashMessage.show($msgText, $msgType, 'testFlashMessage');
     assertTrue(flashMessage.isShown);
 }
 
