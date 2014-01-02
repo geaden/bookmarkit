@@ -14,7 +14,6 @@ env:
   - secure: Q0PfEdRxdzu6oPUaGBWaZr2dsJX6OXm6sovrIqpIaIw6GkF1H8YSfjrzGFpN/rFrSnBKmFkXlLqfmVylCab7iFd1/PeoEOYr+lW9s6CGcC/ElKHqgWaZjFUYnqF8WEXnLh0EmJv8yITBsAb6SSuOtgelpRHAC5TPgXF9SnMhNU8=
 branches:
   only:
-  - ci
   - stage
 addons:
   sauce_connect:
