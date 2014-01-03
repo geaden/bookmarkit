@@ -7,11 +7,12 @@ from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from django.test import LiveServerTestCase
 from django.test.utils import override_settings
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ..models import Bookmark, Link
+from ..models import Bookmark, Link, SharedBookmark
 from ...users.models import BookmarksUser
 from ...tags.models import Tag
 
@@ -39,6 +40,7 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         self.browser.implicitly_wait(20)
         self.user = BookmarksUser.objects.get(pk=1)
         self.create_bookmark_url = reverse('bookmarks:save')
+        self.popular_url = reverse('bookmarks:popular')
         self.browser.get(self.live_server_url)
         body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Please Sign In', body.text,
@@ -158,3 +160,71 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         WebDriverWait(self.browser, 10).until(
             lambda s: s.find_element_by_tag_name('h3'))
         self.assertIn('Search results for "foo":', body.text)
+
+    def test_shared_bookmarks(self):
+        trs = self.browser.find_elements_by_tag_name('tr')
+        hover = ActionChains(self.browser).move_to_element(trs[1])
+        hover.perform()
+        share = self.browser.find_element_by_class_name('bookmark-share')
+        share.click()
+        time.sleep(1)
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
+        self.assertIn('has been successfully shared', alert.text)
+        self.assertEquals(SharedBookmark.objects.count(), 1)
+        hover = ActionChains(self.browser).move_to_element(trs[2])
+        hover.perform()
+        hover = ActionChains(self.browser).move_to_element(trs[1])
+        hover.perform()
+        time.sleep(2)
+        share.click()
+        time.sleep(1)
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
+        self.assertIn('not', alert.text)
+        # Test shared bookmarks layout
+        popular = self.browser.find_element_by_link_text('Popular')
+        popular.click()
+        count_rows = 0
+        table = self.browser.find_element_by_tag_name('table')
+        for tr in table.find_elements_by_tag_name('tr'):
+            count_rows += 1
+        self.assertEquals(2, count_rows)
+        self.assertIn('No one has shared any bookmarks yet', table.text)
+
+    def test_vote_for_bookmarks(self):
+        bookmark = Bookmark.objects.get(pk=1)
+        SharedBookmark.objects.create(bookmark=bookmark)
+        self.browser.get(self.live_server_url + self.popular_url)
+        count_rows = 0
+        table = self.browser.find_element_by_tag_name('table')
+        for tr in table.find_elements_by_tag_name('tr'):
+            count_rows += 1
+        self.assertEquals(count_rows, 2)
+        self.assertNotIn('No one has shared any bookmarks yet', table.text)
+        trs = self.browser.find_elements_by_tag_name('tr')
+        hover = ActionChains(self.browser).move_to_element(trs[1])
+        hover.perform()
+        vote_up = self.browser.find_element_by_class_name('vote-up')
+        vote_up.send_keys(Keys.ENTER)
+        ActionChains(self.browser).move_to_element(vote_up).click(vote_up).\
+            perform()
+        time.sleep(2)
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
+        self.assertIn('You voted for', alert.text)
+        time.sleep(4)
+        trs = self.browser.find_elements_by_tag_name('tr')
+        hover = ActionChains(self.browser).move_to_element(trs[1])
+        hover.perform()
+        vote_up = self.browser.find_element_by_class_name('vote-up')
+        vote_up.send_keys(Keys.ENTER)
+        ActionChains(self.browser).move_to_element(vote_up).click(vote_up).\
+            perform()
+        self.assertEquals(SharedBookmark.objects.all()[0].votes, 2)
+        badge = self.browser.find_element_by_class_name('badge')
+        self.assertEquals(u'2', badge.text, msg='Number of votes should be 2')
+        time.sleep(2)
+        alert = self.browser.find_element_by_css_selector('.alert')
+        self.assertTrue(alert.is_displayed())
+        self.assertIn('can\'t', alert.text)

@@ -1,0 +1,37 @@
+{% extends 'bookmarks/bookmark_list.html' %}
+{% load i18n %}
+{% load static %}
+{% block content %}
+<h3>{% trans 'Popular bookmarks' %}</h3>
+<table class="table table-hover" id="popular-bookmarks">
+    <thead>
+        <th></th>
+        <th>Title</th>
+        <th>Tags</th>
+        <th>Votes</th>
+        <th style="width: 40px;"></th>
+    </thead>
+    <tbody>
+        {% for shared_bookmark in bookmark_list %}
+        <tr>
+            <td><img src="{{ shared_bookmark.bookmark.favicon }}" /></td>
+            <td><a href="{{ shared_bookmark.bookmark.link }}">{{ shared_bookmark.bookmark.title }}</a></td>
+            <td>{% for tag in shared_bookmark.bookmark.tag_set.all %}
+                    <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
+                {% endfor %}
+            <td class="bookmark-votes"><span class="badge">{{ shared_bookmark.votes }}</span></td>
+            <td class="bookmark-vote-col" data-value="{{ shared_bookmark.pk }}"></td>
+        </tr>
+        {% empty %}
+        <tr class="bookmark-empty">
+            <td colspan="4">{% trans 'No one has shared any bookmarks yet' %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% url 'bookmarks:popular' as obj_url %}
+{% include 'snippets/paginate.html' %}
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/bookmark-vote.js' %}"></script>
+{% endblock %}

@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 import json
+import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse_lazy
+from django.db import IntegrityError
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, Http404
+from django.utils import timezone
 from django.views.generic import ListView, FormView
 
-from .models import Bookmark, Link
-from .forms import BookmarkSaveForm
+from rest_framework.generics import GenericAPIView
 
+from .models import Bookmark, Link, SharedBookmark
+from .forms import BookmarkSaveForm
 from ..tags.models import Tag
 
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
@@ -20,6 +25,24 @@ def get_favicon(url):
     """
     return 'http://www.google.com/s2/favicons?domain_url={0}'.format(
         url)
+
+
+class BookmarkAnswer(object):
+    """
+    Class to form answer after sharing result.
+    """
+    def __init__(self, bookmark, created=False):
+        self.pk = bookmark.pk
+        self.favicon = bookmark.favicon
+        self.title = bookmark.title
+        self.url = bookmark.link.url
+        self.shared = bookmark.is_shared
+        self.created = created
+        self.tags = [tag.name for tag in bookmark.tag_set.all()]
+
+    def to_json(self):
+        return json.dumps(
+            self.__dict__, ensure_ascii=True, indent=4)
 
 
 class BookmarksListView(ListView):
@@ -89,12 +112,8 @@ class BookmarkCreateEditView(FormView):
         bookmark.title = form.cleaned_data['title']
         bookmark.save()
         if 'ajax' in self.request.GET:
-            content = {'url': bookmark.link.url,
-                       'favicon': bookmark.favicon,
-                       'title': bookmark.title,
-                       'tags': [tag.name for tag in bookmark.tag_set.all()],
-                       'created': created}
-            return HttpResponse(content=json.dumps(content), content_type='application/json')
+            content = BookmarkAnswer(bookmark, created).to_json()
+            return HttpResponse(content=content, content_type='application/json')
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form):
@@ -129,3 +148,65 @@ class BookmarkSearchView(BookmarksListView):
             ctx['show_results'] = True
             ctx['query'] = query
         return ctx
+
+
+class BookmarkVoteAPIView(GenericAPIView):
+    model = SharedBookmark
+
+    def post(self, request, *args, **kwargs):
+        try:
+            shared_bookmark = self.model.objects.get(id=request.POST.get('bookmark'))
+            user_voted = shared_bookmark.user_voted.filter(email=request.user.email)
+            if not user_voted:
+                shared_bookmark.votes += 1
+                shared_bookmark.user_voted.add(request.user)
+                shared_bookmark.save()
+                return HttpResponse(
+                    content=json.dumps(
+                        {'votes': shared_bookmark.votes,
+                         'bookmark': BookmarkAnswer(
+                             shared_bookmark.bookmark).__dict__},
+                        indent=4),
+                    content_type='application/json')
+            else:
+                return HttpResponseBadRequest()
+        except ObjectDoesNotExist:
+            raise Http404('Bookmark not found.')
+
+
+class BookmarkShareAPIView(GenericAPIView):
+    model = SharedBookmark
+
+    def post(self, request, *args, **kwargs):
+        bookmark_id = request.POST.get('bookmark')
+        try:
+            bookmark = Bookmark.objects.get(pk=bookmark_id)
+            self.model.objects.create(
+                bookmark=bookmark)
+            answer = BookmarkAnswer(bookmark).to_json()
+            return HttpResponse(
+                content=answer,
+                content_type='application/json')
+        except ObjectDoesNotExist:
+            return HttpResponseBadRequest()
+        except IntegrityError, e:
+            shared_bookmark = self.model.objects.get(bookmark_id=bookmark_id)
+            shared_bookmark.delete()
+            bookmark = Bookmark.objects.get(pk=bookmark_id)
+            answer = BookmarkAnswer(bookmark).to_json()
+            return HttpResponse(
+                content=answer, content_type='application/json')
+
+
+class PopularListView(BookmarksListView):
+    model = SharedBookmark
+    template_name = 'bookmarks/popular_list.html'
+
+    def get_queryset(self):
+        shared_bookmarks = super(PopularListView, self).get_queryset()
+        today = timezone.now().today()
+        yesterday = today - datetime.timedelta(1)
+        shared_bookmarks = shared_bookmarks.filter(date__gt=yesterday)
+        shared_bookmarks = shared_bookmarks.order_by('-votes')
+        return shared_bookmarks
+

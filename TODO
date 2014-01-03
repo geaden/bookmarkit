@@ -1,10 +1,13 @@
-* Add tags cloud
-* Search page
-* Add voting for bookmarks
+* Comments on shared bookmarks
 * Syncing your bookmarks
-* Shared bookmarks
+* Ajax Search Box
+* Truncate tags output
 
 Done:
 V Add link to tags
 V Fix pagination layout
 V Flash messages
+V Add tags cloud
+V Search page
+V Shared bookmarks
+V Add voting for bookmarks

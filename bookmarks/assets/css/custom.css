@@ -18,7 +18,8 @@ body {
 #flashMessageWrapper {
     position: fixed;
     top: 35px;
-    left: 45%;
+    left: 50%;
+    margin-left: -100px;
     z-index: 99999;
 }
 
@@ -45,4 +46,13 @@ body {
 p.tag-cloud-element {
     display: inline-block;
     padding: 10px;
+}
+
+td.bookmark-share-col {
+    text-align: center;
+    vertical-align: middle;
+}
+
+a.bookmark-share.notshared {
+    color: #c0c0c0;
 }
