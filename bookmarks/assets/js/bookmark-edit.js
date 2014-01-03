@@ -26,8 +26,16 @@ function bookmark_edit(e) {
     return false;
 }
 
-$(document).ready(function () {
+/**
+ * Helper method to display tooltip
+ */
+function editTooltip() {
+    $('a.bookmark-edit').tooltip();
     $('a.bookmark-edit').on('click', bookmark_edit);
+}
+
+$(document).ready(function () {
+    editTooltip();
     $('a.bookmark-add').click(function(e) {
         e.preventDefault();
         $('#saveBookmark').modal('show');
@@ -96,12 +104,19 @@ function bookmark_save(event) {
                         '">',
                         '<span class="label">', val, '</span></a>'].join('');
                 });
+                var sharedTemplate = '';
+                if (bookmark.shared) {
+                    sharedTemplate = ['<a class="bookmark-share" data-toggle="tooltip" title="Stop sharing bookmark" ',
+                        'href="/ajax/share/">', '<span class="glyphicon glyphicon-share-alt"></span></a>'].join('');
+                }
                 var bookmarkTemplate = ['<tr>',
                             '<td>', '<img src="',
                             bookmark.favicon, '" />',
                             '</td>', '<td>', '<a href="', bookmark.url, '" class="bookmark-edit">',
                             bookmark.title, "</a></td>",
                             '<td>', formattedTags.join('&nbsp;'), '</td>',
+                            '<td class="bookmark-share-col" data-value="',
+                            bookmark.pk, '">', sharedTemplate, '</td>',
                             '<td>', '<a class="bookmark-edit" href="/save/?url=',
                             bookmark.url, '" data-toggle="tooltip" title="Edit bookmark">',
                             '<span class="glyphicon glyphicon-pencil"></span></a></td>',
@@ -121,6 +136,7 @@ function bookmark_save(event) {
                     var $td = $($url).parent();
                     $td.parent().html(bookmarkTemplate.slice(1, bookmarkTemplate.length - 2));
                 }
+                editTooltip();
             }
         }
     });

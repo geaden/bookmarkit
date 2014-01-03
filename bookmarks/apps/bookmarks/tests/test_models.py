@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db import IntegrityError
 from django.test import TestCase
 
 from ..models import Link, Bookmark, SharedBookmark
@@ -41,6 +42,16 @@ class BookmarksTestCase(TestCase):
         self.assertEquals(SharedBookmark.objects.count(), 1)
         self.assertEquals(self.shared.__unicode__(),
                           u'foo@bar.bz, http://www.foo.bar, 1')
+        self.assertTrue(self.bookmark.is_shared)
+        # Share bookmark one more time
+        exception = False
+        try:
+            SharedBookmark.objects.create(bookmark=self.bookmark)
+        except IntegrityError:
+            exception = True
+        self.assertTrue(exception)
+        self.assertTrue(self.bookmark.is_shared)
+        self.assertEquals(SharedBookmark.objects.count(), 1)
 
     def test_bookmark_to_folder(self):
         folder = Folder.objects.create(

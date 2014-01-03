@@ -16,7 +16,7 @@ function runTests(e) {
     var $msgType = $('input[name="msgType"]:checked').val();
     var msgType = ($msgType) ? $msgType : 'info';
     flashMessage.show($msgText, $msgType, 'testFlashMessage');
-    assertTrue(flashMessage.isShown);
+    assertTrue('Flash message should be shown', flashMessage.isShown);
 }
 
 //describe("FlashMessage", function() {

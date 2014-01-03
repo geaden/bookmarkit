@@ -14,6 +14,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="navbar-collapse" id="bm-navbar-collapse">
         <ul class="nav navbar-nav">
+            {% url 'bookmarks:popular' as popular_url %}
+                <li{% if request.path == popular_url %} class="active"{% endif %}><a href="{{ popular_url }}">Popular</a></li>
             {% url 'bookmarks:main' as bookmark_main_url %}
             <li{% if request.path == bookmark_main_url %} class="active"{% endif %}><a href="{{ bookmark_main_url }}">Bookmarks</a></li>
             {% url 'tags:cloud' as tag_cloud_url %}
@@ -27,4 +29,5 @@
       </div>
     </form>
     {% endif %}
+
 </nav>

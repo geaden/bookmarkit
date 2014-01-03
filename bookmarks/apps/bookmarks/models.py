@@ -30,6 +30,11 @@ class Bookmark(models.Model):
     def get_absolute_url(self):
         return self.link.url
 
+    @property
+    def is_shared(self):
+        return SharedBookmark.objects.filter(
+            bookmark=self).exists()
+
 
 class SharedBookmark(models.Model):
     bookmark = models.ForeignKey(Bookmark, unique=True)

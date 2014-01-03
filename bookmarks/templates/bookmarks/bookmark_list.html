@@ -16,7 +16,8 @@
         <th></th>
         <th>Title</th>
         <th>Tags</th>
-        <th></th>
+        {% if not show_results %}<th>Shared</th>
+        <th></th>{% endif %}
     </thead>
     <tbody>
         {% for bookmark in bookmark_list %}
@@ -26,6 +27,7 @@
             <td>{% for tag in bookmark.tag_set.all %}
                     <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
                 {% endfor %}
+            {% if not show_results %}<td class="bookmark-share-col" data-value="{{ bookmark.pk }}">{% if bookmark.is_shared %}<a class="bookmark-share" data-toggle="tooltip" title="Stop sharing bookmark" href="{% url 'bookmarks:share' %}"><span class="glyphicon glyphicon-share-alt"></span></a>{% endif %}</td>{% endif %}
             <td>{% if not show_results %}<a class="bookmark-edit" href="{% url 'bookmarks:save' %}?url={{ bookmark.link }}" data-toggle="tooltip" title="{% trans 'Edit bookmark' %}"><span class="glyphicon glyphicon-pencil"></span></a>{% endif %}</td>
         </tr>
         {% empty %}
@@ -54,8 +56,8 @@
 </div><!-- /.modal -->
 {% endblock %}
 {% block extra_js %}
-<script src="{% static 'js/jquery-ui-1.10.3.custom.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.tagsinput.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/tags.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/bookmark-edit.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bookmark-share.js' %}"></script>
 {% endblock %}

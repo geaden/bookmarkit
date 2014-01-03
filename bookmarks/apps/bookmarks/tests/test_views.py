@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.core.management import call_command
 
 from ...users.models import BookmarksUser
-from ..models import Bookmark, Link
+from ..models import Bookmark, Link, SharedBookmark
 from ...tags.models import Tag
 
 
@@ -93,6 +93,8 @@ class BookmarksViewsTestCase(TestCase):
         self.assertEquals(data['tags'], [u'foo', u'bar'])
         self.assertEquals(before, Bookmark.objects.count())
         self.assertEquals(data['created'], False)
+        self.assertEquals(data['pk'], bookmark.pk)
+        self.assertFalse(data['shared'])
 
         # Not valid data provided
         response = self.client.post('{0}?ajax&url={1}'.format(
@@ -104,39 +106,106 @@ class BookmarksViewsTestCase(TestCase):
         self.assertEquals(data['tags'], [u'This field is required.'])
 
     def test_bookmarks_search(self):
-        self.bookmark_foo = Bookmark.objects.create(
+        bookmark_foo = Bookmark.objects.create(
             link=Link.objects.create(
                 url='http://www.foo.bz'
             ),
             title='Foo',
             user=self.user
         )
-        self.bookmark_boo = Bookmark.objects.create(
+        bookmark_boo = Bookmark.objects.create(
             link=Link.objects.create(
                 url='http://www.boo.bz'
             ),
             title='Boo',
             user=self.user
         )
-        self.bookmark_zoo = Bookmark.objects.create(
+        bookmark_zoo = Bookmark.objects.create(
             link=Link.objects.create(
                 url='http://www.zoo.bz'
             ),
             title='Zoo',
             user=self.user
         )
-        self.tag_foo = Tag.objects.create(name='foo')
-        self.tag_boo = Tag.objects.create(name='boo')
-        self.tag_zoo = Tag.objects.create(name='zoo')
-        self.tag_bz = Tag.objects.create(name='bz')
-        self.bookmark_foo.tag_set.add(self.tag_foo, self.tag_bz)
-        self.bookmark_boo.tag_set.add(self.tag_boo, self.tag_bz)
-        self.bookmark_zoo.tag_set.add(self.tag_zoo, self.tag_bz)
-        self.search_url = reverse('bookmarks:search')
-        self.assertEquals(self.search_url, '/search/')
-        query_url = lambda q: '{0}?query={1}'.format(self.search_url, q)
+        tag_foo = Tag.objects.create(name='foo')
+        tag_boo = Tag.objects.create(name='boo')
+        tag_zoo = Tag.objects.create(name='zoo')
+        tag_bz = Tag.objects.create(name='bz')
+        bookmark_foo.tag_set.add(tag_foo, tag_bz)
+        bookmark_boo.tag_set.add(tag_boo, tag_bz)
+        bookmark_zoo.tag_set.add(tag_zoo, tag_bz)
+        search_url = reverse('bookmarks:search')
+        self.assertEquals(search_url, '/search/')
+        query_url = lambda q: '{0}?query={1}'.format(search_url, q)
         response = self.client.get(query_url('Foo'))
         self.assertEquals(response.status_code, 200)
         self.assertEquals(len(response.context['bookmark_list']), 1)
         self.assertIn('Search results for "Foo"', response.content)
         self.assertNotIn('Add bookmark', response.content)
+
+    def test_share_bookmark_ajax(self):
+        bm = Bookmark.objects.create(
+            title='foo',
+            link=Link.objects.create(url='http://www.foo.bar/'),
+            user=self.user
+        )
+        # Bookmark is not shared yet
+        self.assertFalse(bm.is_shared)
+        share_url = reverse('bookmarks:share')
+        self.assertEquals(share_url, '/ajax/share/')
+        response = self.client.post(share_url,
+                                    data={'bookmark': bm.pk})
+        data = json.loads(response.content)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(SharedBookmark.objects.count(), 1)
+        self.assertEquals(data['pk'], bm.pk)
+        self.assertTrue(data['shared'])
+        self.assertEquals(bm.is_shared, data['shared'])
+        # Bookmark is shared now
+        self.assertTrue(bm.is_shared)
+        # Lets share this bookmark one more time
+        response = self.client.post(share_url,
+                                    data={'bookmark': bm.pk})
+        data = json.loads(response.content)
+        self.assertEquals(response.status_code, 200)
+        # Now bookmark is marked as not shared
+        self.assertFalse(data['shared'])
+        self.assertEquals(data['pk'], bm.pk)
+        self.assertEquals(SharedBookmark.objects.count(), 0)
+
+    def test_shared_bookmark_vote_ajax(self):
+        bm = Bookmark.objects.create(
+            title='foo',
+            link=Link.objects.create(url='http://www.foo.bar/'),
+            user=self.user
+        )
+        shared_bm = SharedBookmark.objects.create(bookmark=bm)
+        vote_url = reverse('bookmarks:vote')
+        self.assertEquals(vote_url, '/ajax/vote/')
+        response = self.client.post(vote_url, data={'bookmark': shared_bm.id})
+        self.assertEquals(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEquals(data['votes'], 2)
+        self.assertEquals(data['bookmark']['pk'], bm.pk)
+        self.assertTrue(data['bookmark']['shared'])
+        response = self.client.post(vote_url, data={'bookmark': shared_bm.id})
+        # User can't vote one more time
+        self.assertEquals(response.status_code, 400)
+        # Pass not existing bookmark
+        response = self.client.post(vote_url, data={'bookmark': 100})
+        self.assertEquals(response.status_code, 404)
+
+    def test_popular_page(self):
+        self.client.logout()
+        bookmark_foo = Bookmark.objects.create(
+            title='Foo',
+            link=Link.objects.create(url='http://www.foo.bz/'),
+            user=self.user
+        )
+        SharedBookmark.objects.create(bookmark=bookmark_foo)
+        popular_url = reverse('bookmarks:popular')
+        self.assertEquals(popular_url, '/popular/')
+        response = self.client.get(popular_url)
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(len(response.context['bookmark_list']), 1)
+        self.assertTemplateUsed(response, 'bookmarks/popular_list.html')

@@ -25,9 +25,6 @@ function clearInputs(form) {
 }
 
 $(document).ready(function () {
-    $('.bookmark-edit').tooltip({
-        placement: 'left'
-    });
     $('.bookmark-tag').tooltip({
         placement: 'right'
     });
