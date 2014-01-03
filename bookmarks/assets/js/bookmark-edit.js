@@ -112,7 +112,7 @@ function bookmark_save(event) {
                 var bookmarkTemplate = ['<tr>',
                             '<td>', '<img src="',
                             bookmark.favicon, '" />',
-                            '</td>', '<td>', '<a href="', bookmark.url, '" class="bookmark-edit">',
+                            '</td>', '<td>', '<a href="', bookmark.url, '">',
                             bookmark.title, "</a></td>",
                             '<td>', formattedTags.join('&nbsp;'), '</td>',
                             '<td class="bookmark-share-col" data-value="',
