@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block title %}{{ shared_bookmark.bookmark.title }}{% endblock %}
+{% block content %}
+<table id="popular-bookmarks" style="width: auto">
+    <tbody>
+        <tr>
+            <td><img src="{{ shared_bookmark.bookmark.favicon }}" /></td>
+            <td><h1><a href="{{ shared_bookmark.bookmark.link.url }}">{{ shared_bookmark.bookmark.title }}</a></h1></td>
+            <td class="bookmark-votes" style="width: 50px;"><span class="badge">{{ shared_bookmark.votes }}</span></td>
+            <td class="bookmark-vote-col" data-value="{{ shared_bookmark.pk }}"></td>
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-lg-10">
+    <span class="glyphicon glyphicon-tags"></span>&nbsp;
+    {% for tag in shared_bookmark.bookmark.tag_set.all %}
+            <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
+    {% endfor %}
+    </div>
+</div>
+<p>{% trans 'Shared By' %}:&nbsp;
+    <a href="#" class="username">{{ shared_bookmark.bookmark.user.get_full_name }}</a> {{ shared_bookmark.date|timesince }} {% trans 'ago' %}</p>
+<h3>{% trans 'Comments' %}</h3>
+<p><span class="glyphicon glyphicon-comment"></span>&nbsp;0 {% trans 'comments' %}</p>
+{% if not user.is_authenticated %}
+<div class="row">
+    <div class="alert alert-warning col-lg-8">
+    {% trans 'To leave comments, please' %} <a href="{% url 'users:login' %}/?next={{ request.path }}">{% trans 'log in' %}</a>
+    </div>
+</div>
+{% else %}
+{% endif %}
+{#TODO: implement comments #}
+{#{% for comment in comment_list %}#}
+{#<div class="comment">#}
+{#<p><b>{{ comment.user.username }}</b> said:</p>#}
+{#{{ comment.comment|escape|urlizetrunc:40|linebreaks }}#}
+{#</div>#}
+{#{% endfor %}#}
+{#<p>Number of comments: {{ comment_count }}</p>#}
+{#{% render_comment_form for bookmarks.sharedbookmark shared_bookmark.id %}#}
+{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+    {% include 'snippets/addthis.html' %}
+    <script type="text/javascript">
+        var addthis_share = {
+            url: '{{ shared_bookmark.bookmark.link.url }}',
+            description: 'Found in <a href="http://bookmarkit.geaden.com/">Geaden Bookmarks</a>'
+        }
+    </script>
+    <script type="text/javascript" src="{% static 'js/bookmark-vote.js' %}"></script>
+{% endblock %}

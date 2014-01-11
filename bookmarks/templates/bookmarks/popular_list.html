@@ -1,8 +1,9 @@
 {% extends 'bookmarks/bookmark_list.html' %}
 {% load i18n %}
 {% load static %}
+{% block title %}{% trans 'Popular bookmarks for last 24 hours' %}{% endblock %}
 {% block content %}
-<h3>{% trans 'Popular bookmarks' %}</h3>
+<h3>{% trans 'Popular bookmarks for last 24 hours' %}</h3>
 <table class="table table-hover" id="popular-bookmarks">
     <thead>
         <th></th>
@@ -15,7 +16,7 @@
         {% for shared_bookmark in bookmark_list %}
         <tr>
             <td><img src="{{ shared_bookmark.bookmark.favicon }}" /></td>
-            <td><a href="{{ shared_bookmark.bookmark.link }}">{{ shared_bookmark.bookmark.title }}</a></td>
+            <td><a href="{% url 'bookmarks:page' shared_bookmark.pk %}">{{ shared_bookmark.bookmark.title }}</a></td>
             <td>{% for tag in shared_bookmark.bookmark.tag_set.all %}
                     <a href="{% url 'tags:page' tag_name=tag.name|escape %}"><span class="label">{{ tag }}</span></a>
                 {% endfor %}

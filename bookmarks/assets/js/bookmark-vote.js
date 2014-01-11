@@ -18,12 +18,15 @@ function voteUp(e) {
                 flash.show(msg, 'success');
                 var $votes = $($(_this).parent().siblings().splice(-1)[0]).find('span.badge');
                 var $votesCount = $votes.text();
-                console.log($votesCount);
                 $votes.text(Number($votesCount) + 1);
             },
             400: function(error) {
                 var msg = 'You can\'t vote for this bookmark!';
                 flash.show(msg, 'danger');
+            },
+            403: function(error) {
+                var msg = 'You have to be logged in to vote.';
+                flash.show(msg, 'warning');
             }
         }
     });

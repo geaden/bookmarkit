@@ -185,6 +185,7 @@ INSTALLED_APPS = (
     'apps.friends',
     'apps.bookmarks',
     'apps.tags',
+    # 'apps.comments', TODO: include comments
 )
 
 SITE_HOST = 'foo.bar'

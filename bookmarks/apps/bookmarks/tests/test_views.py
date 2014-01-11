@@ -194,6 +194,10 @@ class BookmarksViewsTestCase(TestCase):
         # Pass not existing bookmark
         response = self.client.post(vote_url, data={'bookmark': 100})
         self.assertEquals(response.status_code, 404)
+        # Logout user
+        self.client.logout()
+        response = self.client.post(vote_url, data={'bookmark': shared_bm.id})
+        self.assertEquals(403, response.status_code)
 
     def test_popular_page(self):
         self.client.logout()
@@ -202,10 +206,30 @@ class BookmarksViewsTestCase(TestCase):
             link=Link.objects.create(url='http://www.foo.bz/'),
             user=self.user
         )
+        bookmark_bar = Bookmark.objects.create(
+            title='Bar',
+            link=Link.objects.create(url='http://www.bar.bz/'),
+            user=self.user
+        )
         SharedBookmark.objects.create(bookmark=bookmark_foo)
+        SharedBookmark.objects.create(bookmark=bookmark_bar)
         popular_url = reverse('bookmarks:popular')
         self.assertEquals(popular_url, '/popular/')
         response = self.client.get(popular_url)
         self.assertEquals(response.status_code, 200)
-        self.assertEquals(len(response.context['bookmark_list']), 1)
+        self.assertEquals(len(response.context['bookmark_list']), 2)
         self.assertTemplateUsed(response, 'bookmarks/popular_list.html')
+
+    def test_bookmark_page(self):
+        bm = Bookmark.objects.create(
+            title='foo',
+            link=Link.objects.create(url='http://www.foo.bar/'),
+            user=self.user
+        )
+        shared_bm = SharedBookmark.objects.create(bookmark=bm)
+        bookmark_page_url = reverse('bookmarks:page',
+                                    kwargs={'pk': shared_bm.pk})
+        self.assertEquals(bookmark_page_url, '/{0}/'.format(shared_bm.pk))
+        response = self.client.get(bookmark_page_url)
+        self.assertEquals(200, response.status_code)
+        self.assertIsInstance(response.context['shared_bookmark'], SharedBookmark)

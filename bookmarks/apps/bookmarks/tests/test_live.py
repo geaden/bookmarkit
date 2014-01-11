@@ -228,3 +228,12 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         alert = self.browser.find_element_by_css_selector('.alert')
         self.assertTrue(alert.is_displayed())
         self.assertIn('can\'t', alert.text)
+
+    def test_bookmark_page(self):
+        bookmark = Bookmark.objects.get(pk=1)
+        sb = SharedBookmark.objects.create(bookmark=bookmark)
+        bookmark_page_url = reverse('bookmarks:page', kwargs={'pk': sb.pk})
+        self.browser.get(self.live_server_url + bookmark_page_url)
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn(sb.bookmark.title, body.text)
+        # TODO: tests comments
