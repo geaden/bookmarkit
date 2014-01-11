@@ -146,19 +146,20 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         self.assertIn('bar', body.text, msg='Tag `bar` should be present')
 
     def test_bookmark_search(self):
-        Bookmark.objects.create(
-            link=Link.objects.create(url='http://www.foo.bz/'),
-            user=self.user,
-            title='Foo'
-        )
         # positive search results
         search_field = self.browser.find_element_by_id('bookmarkSearch')
-        search_field.send_keys('foo')
+        search_field.send_keys('XrgEdk')
         search_field.send_keys(Keys.RETURN)
         body = self.browser.find_element_by_tag_name('body')
         WebDriverWait(self.browser, 10).until(
             lambda s: s.find_element_by_tag_name('h3'))
-        self.assertIn('Search results for "foo":', body.text)
+        self.assertIn('Search results for "XrgEdk":', body.text)
+        table = self.browser.find_element_by_xpath('//table[@class="table table-hover"]')
+        # Number of search results should be 1
+        count_rows = 0
+        for tr in table.find_elements_by_tag_name('tr'):
+            count_rows += 1
+        self.assertEquals(count_rows, 2)
 
     def test_shared_bookmarks(self):
         trs = self.browser.find_elements_by_tag_name('tr')
@@ -175,7 +176,7 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         hover.perform()
         hover = ActionChains(self.browser).move_to_element(trs[1])
         hover.perform()
-        time.sleep(2)
+        time.sleep(3)
         share.click()
         time.sleep(1)
         alert = self.browser.find_element_by_css_selector('.alert')

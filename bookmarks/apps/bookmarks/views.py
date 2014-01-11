@@ -206,11 +206,10 @@ class PopularListView(BookmarksListView):
 
     def get_queryset(self):
         shared_bookmarks = super(PopularListView, self).get_queryset()
-        today = timezone.now().today()
-        yesterday = today - datetime.timedelta(1)
-        shared_bookmarks = shared_bookmarks.filter(date__gt=yesterday)
-        shared_bookmarks = shared_bookmarks.order_by('-votes')
-        return shared_bookmarks
+        # today = timezone.now().today()
+        # yesterday = today - datetime.timedelta(1)
+        # shared_bookmarks = shared_bookmarks.filter(date__gt=yesterday)
+        return shared_bookmarks.order_by('-votes')
 
 
 class BookmarkPageView(DetailView):
