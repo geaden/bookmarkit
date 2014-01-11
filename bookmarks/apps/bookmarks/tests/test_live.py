@@ -106,7 +106,6 @@ class BookmarksLiveTestCase(LiveServerTestCase):
         )
         time.sleep(1)
         alert = self.browser.find_element_by_css_selector('.alert')
-        # self.browser.execute_script("window.scrollTo(0, 0);")
         self.assertTrue(alert.is_displayed())
         body = self.browser.find_element_by_tag_name('body')
         table = self.browser.find_element_by_xpath('//table[@class="table table-hover"]')
