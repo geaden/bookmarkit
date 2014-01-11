@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from .views import BookmarksListView, BookmarkCreateEditView, \
     BookmarkSearchView, BookmarkVoteAPIView, BookmarkShareAPIView, \
-    PopularListView
+    PopularListView, BookmarkPageView
 
 __author__ = 'Gennady Denisov <denisovgena@gmail.com>'
 
@@ -24,9 +24,12 @@ urlpatterns = patterns(
         view=login_required(BookmarkSearchView.as_view()),
         name='search'),
     url('^ajax/vote/$',
-        view=login_required(BookmarkVoteAPIView.as_view()),
+        view=BookmarkVoteAPIView.as_view(),
         name='vote'),
     url('^ajax/share/$',
         view=login_required(BookmarkShareAPIView.as_view()),
         name='share'),
+    url('^(?P<pk>\d+)/$',
+        view=BookmarkPageView.as_view(),
+        name='page'),
 )

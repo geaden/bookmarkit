@@ -8,7 +8,8 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest, Http404
 from django.utils import timezone
-from django.views.generic import ListView, FormView
+from django.views.generic import ListView, FormView, DetailView
+from rest_framework import permissions
 
 from rest_framework.generics import GenericAPIView
 
@@ -152,6 +153,7 @@ class BookmarkSearchView(BookmarksListView):
 
 class BookmarkVoteAPIView(GenericAPIView):
     model = SharedBookmark
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -209,4 +211,10 @@ class PopularListView(BookmarksListView):
         shared_bookmarks = shared_bookmarks.filter(date__gt=yesterday)
         shared_bookmarks = shared_bookmarks.order_by('-votes')
         return shared_bookmarks
+
+
+class BookmarkPageView(DetailView):
+    model = SharedBookmark
+    template_name = 'bookmarks/bookmark_detail.html'
+    context_object_name = 'shared_bookmark'
 

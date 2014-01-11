@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% block title %}{% trans 'Tags cloud' %}{% endblock %}
 {% block content %}
     <div id="tag-cloud">
     {% for tag in tag_list %}

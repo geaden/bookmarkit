@@ -28,6 +28,14 @@
         <input id="bookmarkSearch" type="text" class="form-control" placeholder="Search..." name="query" autocomplete="off">
       </div>
     </form>
+    {% else %}
+    <div class="navbar-collapse" id="bm-navbar-collapse">
+        <ul class="nav navbar-nav">
+            {% url 'bookmarks:popular' as popular_url %}
+                <li{% if request.path == popular_url %} class="active"{% endif %}><a href="{{ popular_url }}">Popular</a></li>
+        </ul>
+    </div>
     {% endif %}
+
 
 </nav>

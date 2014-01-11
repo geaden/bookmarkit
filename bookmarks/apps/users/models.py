@@ -13,8 +13,6 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 
-
-
 # South
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^oauth2client\.django_orm\.FlowField"])
